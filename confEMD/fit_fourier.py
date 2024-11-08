@@ -121,6 +121,10 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
     This function fits the input signal with the continuous power law using 
     debiased least squares fitting, and calculates the frequency-dependent
     confidence limit based on a user-defined false alarm probability.
+    
+    The method of debiased least squares fitting is based on [1].
+    
+    [1] 'https://www.aanda.org/articles/aa/abs/2005/07/aa1453/aa1453.html'
 
     Parameters
     ----------
@@ -154,10 +158,6 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
             Energy of the white-noise component
         color_energy : float
             Energy of the coloured-noise component
-        white_std: float
-            Standard deviation of the white-noise component
-        color_std: float
-            Standard deviation of the white-noise component
         pl_index : float
             Index of the coloured-noise component
         confidence_limit : numpy array
@@ -171,7 +171,8 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
     sp = np.fft.fft(x) 
     freq = np.fft.fftfreq(n,d=dt)[1:n//2] #discard 0 Hz and ##Nyquist frequency
     power = 2 * (np.abs(sp[1:n//2])**2) / (n**2) # power spectrum
-    
+    norm = n*dt / np.mean(x)**2 #see eq. (1) in [1]
+    power *= norm #power spectrum with modified normalisation
 
     #Take the logarithm
     freq_fit = np.log10(freq)
@@ -219,12 +220,12 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
     # print (params_continuous_power_law)
     
     #calculate energy 
-    white_energy = N_w*nf*n
-    color_energy = N_c*nf*n
+    white_energy = N_w * nf * n / norm
+    color_energy = N_c * nf * n / norm
     
-    #calculate standard deviation of noise
-    white_std = np.sqrt(N_w*nf)
-    color_std = np.sqrt(N_c*nf)
+    # #calculate standard deviation of noise
+    # white_std = np.sqrt(N_w*nf)
+    # color_std = np.sqrt(N_c*nf)
     
     #calculate expectation
     expectation_broken = broken_power_law(freq, *params_broken_power_law)
@@ -257,8 +258,6 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
         expectation_continuous: list
         white_energy: float
         color_energy: float
-        white_std: float
-        color_std: float
         pl_index: float
         confidence_limit: list
         N_w: float
@@ -266,6 +265,6 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
         
     fit_fourier = fit_fourier(power, freq, freq0, expectation_broken, 
                     expectation_continuous, white_energy, color_energy, 
-                    white_std, color_std, pl_index, confidence_limit, N_w, N_c)    
+                    pl_index, confidence_limit, N_w, N_c)    
 
     return fit_fourier
