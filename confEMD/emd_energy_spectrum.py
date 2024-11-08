@@ -6,7 +6,7 @@ Created on Thu Oct  3 16:54:51 2024
 """
 
 import numpy as np
-from emd_period_energy import emd_period_energy
+from confEMD.emd_period_energy import emd_period_energy
 from typing import NamedTuple
 import matplotlib.pyplot as plt
 

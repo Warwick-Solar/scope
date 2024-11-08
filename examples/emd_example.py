@@ -9,9 +9,9 @@ import numpy as np
 import colorednoise as cn
 import matplotlib.pyplot as plt
 import emd
-from fit_fourier import fit_fourier
-from emd_trend import emd_trend 
-from emd_energy_spectrum import emd_energy_spectrum
+from confEMD.fit_fourier import fit_fourier
+from confEMD.emd_trend import emd_trend 
+from confEMD.emd_energy_spectrum import emd_energy_spectrum
 
 #Plot EMD modes
 def plot_modes(modes):
@@ -25,39 +25,18 @@ def plot_modes(modes):
     plt.xlabel('Time')
     plt.show()
     
-    
 #Generate time series
 L = 30 #length of time series
 N = 300 #number of data points 
-dt = L/N 
+dt = L / N 
 
 t = dt * np.arange(N)
-start_time = np.max(t)*0.05 
-decay_time = np.max(t)*0.3
+start_time = np.max(t) * 0.05 
+decay_time = np.max(t) * 0.3
 
 trend = np.exp(-t/decay_time)
-
-# period_change_time = np.max(t)*0.7
-# period = 7*np.exp(-(t - start_time)/period_change_time)
-
-# omega = 2*np.pi/period
-# osc = np.sin(omega * (t - start_time))
-# plt.plot(t, osc)
-# plt.show()
-
-# envelope = (t < start_time)*np.exp(-((t-start_time)/2)**2) + (t > start_time)*np.exp(-((t-start_time)/17)**2)
-# plt.plot(t, envelope)
-# plt.show()
-
-# signal = 0.1*osc*envelope
-# plt.plot(t, signal)
-# plt.show()
-
-# trend = np.zeros(t.size)
-signal = 0.1*np.sin(2*np.pi*(1/6)*t) #freq=5/30
-
-# noise = 0.06*cn.powerlaw_psd_gaussian(1, t.size)
-noise = np.loadtxt('emd_example/Data/noise')
+signal = 0.1 * np.sin(2*np.pi*(1/6)*t) #freq=5/30
+noise = 0.06 * cn.powerlaw_psd_gaussian(1, t.size)
 
 x = trend + signal + noise
 
@@ -70,8 +49,6 @@ plt.title('Input Signal')
 plt.show()
 
 x -= np.mean(x) #set mean to zero
-
-
 #%%
 #-----------------------------------------------------------------------------
 #Calculate EMD modes
@@ -89,7 +66,7 @@ plt.title('trend of signal')
 plt.show()
 
 #subtract this rough trend from the signal (to remove the discontinuity)
-x1=x-trend_emd
+x1 = x - trend_emd
 
 #plot detrended signal
 plt.plot(t, x1)
@@ -99,7 +76,7 @@ plt.show()
 #Calculate EMD power spectrum
 sp = emd_energy_spectrum(modes, t)
 
-cutoff_period = 0.4*len(x)*dt #show cutoff period
+cutoff_period = 0.4 * len(x) * dt #show cutoff period
 
 #plot EMD spectrum
 plt.errorbar(sp.period, sp.energy, xerr=sp.period_err, label='EMD Spectrum', fmt='.', color='green', ms=15, capsize=5, mew=2)
@@ -184,12 +161,12 @@ plt.show()
 
 #%%
 #-----------------------------------------------------------------------------
-from emd_noise_conf import emd_noise_conf
+from confEMD.emd_noise_conf import emd_noise_conf
 #Confidence limits for coloured noise
-conf_c = emd_noise_conf(t, alpha = alpha, period1 = 2*dt, period2 = N*dt, num_samples = 1000, 
+conf_c = emd_noise_conf(t, alpha = alpha, period1 = 2*dt, period2 = N*dt, num_samples = 100, 
                         signal_energy = fit_fft.color_energy, fap = 0.05)
 #Confidence limits for white noise
-conf_w = emd_noise_conf(t, alpha = 0, period1 = 2*dt, period2 = N*dt, num_samples = 1000, 
+conf_w = emd_noise_conf(t, alpha = 0, period1 = 2*dt, period2 = N*dt, num_samples = 100, 
                         signal_energy = fit_fft.white_energy, fap = 0.05)
 
 #Upper confidence limit for the combined noises
@@ -218,5 +195,3 @@ plt.ylabel('EMD Modal Energy [a.u.]')
 plt.legend()
 plt.grid()
 plt.show()
-
-

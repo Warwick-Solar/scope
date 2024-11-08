@@ -8,7 +8,10 @@ setup(
     author_email="TBD",
     packages=find_packages(),
     install_requires=[
-        # List our dependencies here
+       'colorednoise>=2.2.0',
+       'emd>=0.7.0',
+       'numpy>=1.26.4',
+       'lmfit>=1.3.2'
     ],
     python_requires=">=3.6",
 )
