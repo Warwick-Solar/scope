@@ -18,10 +18,11 @@ def plot_spectrum(fit_fft):
 
     #coloured noise index
     alpha = fit_fft['pl_index']
+    alpha_stderr = fit_fft['pl_index_stderr']
 
     plt.loglog(period, fit_fft['power'], linewidth=2)
     plt.loglog(period, fit_fft['expectation_continuous'],
-               label=r'$\alpha$ = ' + str("%.2f" % alpha),
+               label=rf'$\alpha$ = {alpha:.2f} +/- {alpha_stderr:.2f} ',
                color='blue', linewidth=3)
     plt.loglog(period, fit_fft['confidence_limit'], label='95%',
                color='red', linewidth=3)
@@ -92,6 +93,7 @@ x = noise
 plot_signal(x)
 
 x -= np.mean(x) #set mean to zero
+# x -= np.mean(x) #set mean to zero
 
 fit_fft = fit_fourier(x, dt, fap=0.05)
 

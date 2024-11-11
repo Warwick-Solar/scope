@@ -222,16 +222,18 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
     pars_log_power = mod_log_power.make_params(
         N_c={
             'value': N_c*np.mean(freq**(-pl_index)), 
+            'value':  N_c*np.mean(freq**(-pl_index)), 
             'min': 0.0
             },
         pl_index={
-            'value': pl_index,
+            'value': min(3.0, max(pl_index, 0.0)),
             'min': 0.0,
             'max': 3.0
             }, 
         N_w={
             'value': N_w, 
-            'min': 0.0})
+            'min': 0.0}
+        )
     
     result_log_power = mod_log_power.fit(power_fit, pars_log_power, freq=freq)
 
@@ -239,6 +241,7 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
     #Extract parameters
     N_c = result_log_power.params['N_c'].value
     pl_index = result_log_power.params['pl_index'].value
+    pl_index_stderr = result_log_power.params['pl_index'].stderr
     N_w = result_log_power.params['N_w'].value
     params_continuous_power_law = [N_c, pl_index, N_w]
     
@@ -285,6 +288,7 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
         'white_energy': white_energy,
         'color_energy': color_energy,
         'pl_index': pl_index,
+        'pl_index_stderr': pl_index_stderr,
         'confidence_limit': confidence_limit,
         'N_w': N_w,
         'N_c': N_c
