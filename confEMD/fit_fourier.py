@@ -256,9 +256,12 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
         'frequency0': freq0,
         'expectation_broken': expectation_broken,
         'expectation_continuous': expectation_continuous,
+        'white_energy': white_energy,
         'color_energy': color_energy,
         'pl_index': pl_index,
         'confidence_limit': confidence_limit,
-        'N_c': N_c}
+        'N_w': N_w,
+        'N_c': N_c
+    }
 
     return fit_fourier_result
