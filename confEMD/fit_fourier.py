@@ -186,28 +186,52 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
     k1_guess = (power_fit[0] - y0_guess)/(freq_fit[0] - x0_guess)
     
     mod_piecewise_linear = Model(piecewise_linear)
-    pars_piecewise_linear = mod_piecewise_linear.make_params(x0 = {'value': x0_guess, 'min': min(freq_fit), 'max': max(freq_fit)}, y0 = {'value': y0_guess, 'min': min(power_fit), 'max': max(power_fit)}, k1 = {'value': k1_guess})
+    pars_piecewise_linear = mod_piecewise_linear.make_params(
+        x0={
+            'value': x0_guess,
+            'min': min(freq_fit),
+            'max': max(freq_fit)
+            },
+        y0={
+            'value': y0_guess,
+            'min': min(power_fit),
+            'max': max(power_fit)
+            },
+        k1={
+            'value': k1_guess
+            }
+        )
+    
     result_piecewise_linear = mod_piecewise_linear.fit(power_fit, pars_piecewise_linear, x=freq_fit)
     
     #Extract parameters
     freq0 = 10**result_piecewise_linear.params['x0'].value
-    N_c = 10**(result_piecewise_linear.params['y0'].value - result_piecewise_linear.params['k1'].value*result_piecewise_linear.params['x0'].value + 0.25068)
+    N_c = 10 ** (
+        result_piecewise_linear.params['y0'].value
+        - result_piecewise_linear.params['k1'].value * result_piecewise_linear.params['x0'].value
+        + 0.25068
+    )
     pl_index = -result_piecewise_linear.params['k1'].value
     N_w = 10**(result_piecewise_linear.params['y0'].value + 0.25068) 
     params_broken_power_law = [freq0, N_c, pl_index, N_w]
-    # print (params_broken_power_law)
-    
-    # plt.loglog(10**x0_guess, 10**y0_guess, 'x') #initial guess of knot
-    
-    # plt.loglog(freq, power, color='grey')
-    # plt.loglog(freq, broken_power_law(freq, *params_broken_power_law), linestyle='dashed', color='b', label='broken power law')
-    # plt.show()
     
     #Fit log continuous power law model to the power spectrum
     mod_log_power = Model(log_power)
     #use the fitted parameters from the broken power law model as initial guess, ignore freq0
     #N_c*np.mean(freq**(-pl_index)) because the broken power law model is not normalised with the mean of the power
-    pars_log_power = mod_log_power.make_params(N_c = {'value': N_c*np.mean(freq**(-pl_index)), 'min': 0.0}, pl_index = {'value': pl_index}, N_w = {'value': N_w, 'min': 0.0})
+    pars_log_power = mod_log_power.make_params(
+        N_c={
+            'value': N_c*np.mean(freq**(-pl_index)), 
+            'min': 0.0
+            },
+        pl_index={
+            'value': pl_index,
+            'min': 0.0,
+            'max': 3.0
+            }, 
+        N_w={
+            'value': N_w, 
+            'min': 0.0})
     
     result_log_power = mod_log_power.fit(power_fit, pars_log_power, freq=freq)
 
@@ -217,7 +241,6 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
     pl_index = result_log_power.params['pl_index'].value
     N_w = result_log_power.params['N_w'].value
     params_continuous_power_law = [N_c, pl_index, N_w]
-    # print (params_continuous_power_law)
     
     #calculate energy 
     white_energy = N_w * nf * n / norm
@@ -233,7 +256,10 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
     
     #calculate confidence limits 
     cl_ratio_gamma = -2*np.log(1 - (1-fap)**(1/nf))
-    confidence_limit = 10**(np.log10(continuous_power_law(freq, *params_continuous_power_law)) + np.log10(cl_ratio_gamma/2))
+    confidence_limit = 10 ** (
+        np.log10(continuous_power_law(freq, *params_continuous_power_law))
+        + np.log10(cl_ratio_gamma / 2)
+    )
     
     #Plot results
     if plot_spectrum == True:
