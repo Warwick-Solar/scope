@@ -141,7 +141,7 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
 
     Returns
     -------
-    fit_fourier: NamedTuple
+    fit_fourier_result: dict
         Attributes
         ----------
         power : numpy array
@@ -250,21 +250,15 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
         plt.show()
         
         
-    class fit_fourier(NamedTuple):
-        power: list
-        frequency: list
-        frequency0: float
-        expectation_broken: list
-        expectation_continuous: list
-        white_energy: float
-        color_energy: float
-        pl_index: float
-        confidence_limit: list
-        N_w: float
-        N_c: float
-        
-    fit_fourier = fit_fourier(power, freq, freq0, expectation_broken, 
-                    expectation_continuous, white_energy, color_energy, 
-                    pl_index, confidence_limit, N_w, N_c)    
+    fit_fourier_result = {
+        'power': power, 
+        'frequency': freq,
+        'frequency0': freq0,
+        'expectation_broken': expectation_broken,
+        'expectation_continuous': expectation_continuous,
+        'color_energy': color_energy,
+        'pl_index': pl_index,
+        'confidence_limit': confidence_limit,
+        'N_c': N_c}
 
-    return fit_fourier
+    return fit_fourier_result
