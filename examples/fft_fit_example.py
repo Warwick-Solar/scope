@@ -68,7 +68,7 @@ N = 300 #number of data points
 dt = L / N 
 t = dt * np.arange(N)
 
-noise = 0.1 * cn.powerlaw_psd_gaussian(2, t.size) 
+noise = 0.1 * cn.powerlaw_psd_gaussian(2, t.size)  
 x = noise 
 
 plot_signal(x)
@@ -93,7 +93,6 @@ x = noise
 plot_signal(x)
 
 x -= np.mean(x) #set mean to zero
-# x -= np.mean(x) #set mean to zero
 
 fit_fft = fit_fourier(x, dt, fap=0.05)
 
@@ -104,12 +103,12 @@ plot_spectrum(fit_fft)
 #Generate time series
 L = 30 #length of time series
 N = 300 #number of data points 
-P = 1 #signal period
+P = 5 #signal period
 dt = L / N 
 t = dt * np.arange(N)
 
 noise = 0.1 * cn.powerlaw_psd_gaussian(0, t.size)  + 0.1 * cn.powerlaw_psd_gaussian(2, t.size) 
-signal = 0.05 * np.sin(2*np.pi*t/P) #freq=5/30
+signal = 0.1 * np.sin(2*np.pi*t/P) #freq=5/30
 x = noise + signal
 
 plot_signal(x)
@@ -121,4 +120,5 @@ fit_fft = fit_fourier(x, dt, fap=0.05)
 plot_spectrum(fit_fft)
 
 
+#%%
 
