@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 from typing import NamedTuple
 from lmfit import Model
 
+OFFSET = 0.25068
+
 def piecewise_linear(x, x0, y0, k1):
     ''' A piecewise linear function to be fitted.
     
@@ -112,7 +114,7 @@ def log_power(freq, N_c, pl_index, N_w):
         The function
 
     '''
-    return np.log10(N_c/np.mean(freq**(-pl_index))*freq**(-pl_index) + N_w) - 0.25068
+    return np.log10(N_c/np.mean(freq**(-pl_index))*freq**(-pl_index) + N_w) - OFFSET
 
 
 def fit_fourier(x, dt, fap, plot_spectrum = False):
@@ -171,7 +173,7 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
     sp = np.fft.fft(x) 
     freq = np.fft.fftfreq(n,d=dt)[1:n//2] #discard 0 Hz and ##Nyquist frequency
     power = 2 * (np.abs(sp[1:n//2])**2) / (n**2) # power spectrum
-    norm = n*dt / np.mean(x)**2 #see eq. (1) in [1]
+    norm = n*dt / np.std(x)**2 #see eq. (1) in [1], but use normalise by std not by mean
     power *= norm #power spectrum with modified normalisation
 
     #Take the logarithm
@@ -209,10 +211,10 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
     N_c = 10 ** (
         result_piecewise_linear.params['y0'].value
         - result_piecewise_linear.params['k1'].value * result_piecewise_linear.params['x0'].value
-        + 0.25068
+        + OFFSET
     )
     pl_index = -result_piecewise_linear.params['k1'].value
-    N_w = 10**(result_piecewise_linear.params['y0'].value + 0.25068) 
+    N_w = 10**(result_piecewise_linear.params['y0'].value + OFFSET) 
     params_broken_power_law = [freq0, N_c, pl_index, N_w]
     
     #Fit log continuous power law model to the power spectrum
@@ -221,13 +223,12 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
     #N_c*np.mean(freq**(-pl_index)) because the broken power law model is not normalised with the mean of the power
     pars_log_power = mod_log_power.make_params(
         N_c={
-            'value': N_c*np.mean(freq**(-pl_index)), 
             'value':  N_c*np.mean(freq**(-pl_index)), 
             'min': 0.0
             },
         pl_index={
             'value': min(3.0, max(pl_index, 0.0)),
-            'min': 0.0,
+            'min': -0.1,
             'max': 3.0
             }, 
         N_w={
@@ -236,8 +237,23 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
         )
     
     result_log_power = mod_log_power.fit(power_fit, pars_log_power, freq=freq)
-
     
+    # check if the fitting of the slope was successfull 
+    alpha = np.abs(result_log_power.params['pl_index'].value)
+    d_alpha = result_log_power.params['pl_index'].stderr
+    N_c = result_log_power.params['N_c'].value
+    N_w = result_log_power.params['N_w'].value
+
+    # if there is only red noise d_alpha can be None when fitted by power law + const
+    if d_alpha is None:
+        d_alpha = 100 * alpha # set d_alpha a high float value
+    # if there is high uncertainty in a slope or whitre noise prevails then fit by a simpler model
+    if d_alpha / max(alpha, 1e-6) > 0.8 or N_w / N_c > 100:
+        # fit with only power-law part
+        pars_log_power['N_w'].set(value=0, vary=False)
+        result_log_power = mod_log_power.fit(power_fit, pars_log_power, freq=freq)
+
+
     #Extract parameters
     N_c = result_log_power.params['N_c'].value
     pl_index = result_log_power.params['pl_index'].value
