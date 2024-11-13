@@ -159,7 +159,6 @@ def emd_period_energy(s, t, plot_spectrum=False):
         global_ws: list
         best_fit: list
         
-    tmp = 3
         
     emd_period_energy = emd_period_energy(energy, dominant_period, dominant_period_err, period, global_ws, best_fit)
     
