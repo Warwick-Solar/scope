@@ -7,7 +7,6 @@ Created on Thu Oct  3 21:01:11 2024
 
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import NamedTuple
 from lmfit import Model
 
 OFFSET = 0.25068

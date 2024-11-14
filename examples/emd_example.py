@@ -79,7 +79,7 @@ sp = emd_energy_spectrum(modes, t)
 cutoff_period = 0.4 * len(x) * dt #show cutoff period
 
 #plot EMD spectrum
-plt.errorbar(sp.period, sp.energy, xerr=sp.period_err, label='EMD Spectrum', fmt='.', color='green', ms=15, capsize=5, mew=2)
+plt.errorbar(sp['period'], sp['energy'], xerr=sp['period_err'], label='EMD Spectrum', fmt='.', color='green', ms=15, capsize=5, mew=2)
 plt.axvline(x = cutoff_period, color = 'black', linestyle='dashed') #cutoff period = 0.4*(mode length)
 
 plt.xscale('log')
@@ -122,14 +122,14 @@ plt.show()
 fit_fft = fit_fourier(x,dt,fap=0.05)
 
 #Convert frequency to period
-period = 1/fit_fft.frequency
+period = 1/fit_fft['frequency']
 
 #coloured noise index
-alpha = fit_fft.pl_index
+alpha = fit_fft['pl_index']
 
-plt.loglog(period, fit_fft.power, linewidth=2)
-plt.loglog(period, fit_fft.expectation_continuous, label=r'$\alpha$ = ' + str("%.2f" % alpha), color='blue', linewidth=3)
-plt.loglog(period, fit_fft.confidence_limit, label='95%', color='red', linewidth=3)
+plt.loglog(period, fit_fft['power'], linewidth=2)
+plt.loglog(period, fit_fft['expectation_continuous'], label=r'$\alpha$ = ' + str("%.2f" % alpha), color='blue', linewidth=3)
+plt.loglog(period, fit_fft['confidence_limit'], label='95%', color='red', linewidth=3)
 plt.title('FFT Spectrum')
 plt.xlabel('Period [a.u.]')
 plt.ylabel('Fourier Magnitude [a.u.]')
@@ -145,7 +145,7 @@ modes = emd.sift.sift(x, **config)
 sp = emd_energy_spectrum(modes, t)
 
 #plot EMD spectrum
-plt.errorbar(sp.period, sp.energy, xerr=sp.period_err, label='EMD Spectrum', fmt='.', color='green', ms=15, capsize=5, mew=2)
+plt.errorbar(sp['period'], sp['energy'], xerr=sp['period_err'], label='EMD Spectrum', fmt='.', color='green', ms=15, capsize=5, mew=2)
 plt.axvline(x = cutoff_period, color='black', linestyle='dashed')
 
 plt.xscale('log')
@@ -164,22 +164,22 @@ plt.show()
 from confEMD.emd_noise_conf import emd_noise_conf
 #Confidence limits for coloured noise
 conf_c = emd_noise_conf(t, alpha = alpha, period1 = 2*dt, period2 = N*dt, num_samples = 100, 
-                        signal_energy = fit_fft.color_energy, fap = 0.05)
+                        signal_energy = fit_fft['color_energy'], fap = 0.05)
 #Confidence limits for white noise
 conf_w = emd_noise_conf(t, alpha = 0, period1 = 2*dt, period2 = N*dt, num_samples = 100, 
-                        signal_energy = fit_fft.white_energy, fap = 0.05)
+                        signal_energy = fit_fft['white_energy'], fap = 0.05)
 
 #Upper confidence limit for the combined noises
-conf_up = conf_c.up + conf_w.up
+conf_up = conf_c['up'] + conf_w['up']
 
 #Lower confidence limit for the combined noises
-conf_down = conf_c.down + conf_w.down
+conf_down = conf_c['down'] + conf_w['down']
 
-conf_period = conf_c.period
+conf_period = conf_c['period']
 
 #%%
 #Plot EMD spectrum with confidence limits
-plt.errorbar(sp.period, sp.energy, xerr=sp.period_err, label='EMD Spectrum', fmt='.', color='green', ms=15, capsize=5, mew=2)
+plt.errorbar(sp['period'], sp['energy'], xerr=sp['period_err'], label='EMD Spectrum', fmt='.', color='green', ms=15, capsize=5, mew=2)
 plt.axvline(x = cutoff_period, color='black', linestyle='dashed')
 plt.plot(conf_period, conf_up, color='red', label='95%')
 plt.plot(conf_period, conf_down, color='red')
