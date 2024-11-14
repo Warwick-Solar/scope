@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 from confEMD.waveletFunctions import wavelet
 from scipy import interpolate
 from lmfit.models import QuadraticModel, GaussianModel
-from typing import NamedTuple
 
 def fit_global_ws(period, global_ws):
     ''' A global wavelet spectrum fitting algorithm.
@@ -97,7 +96,7 @@ def emd_period_energy(s, t, plot_spectrum=False):
 
     Returns
     -------
-    emd_period_energy : NamedTuple
+    emd_period_energy_result : dict
         Attributes
         ----------
         energy : float
@@ -150,15 +149,14 @@ def emd_period_energy(s, t, plot_spectrum=False):
     
     dominant_period, dominant_period_err, best_fit = fit_global_ws(period, global_ws)
 
+
+    emd_period_energy_result = {
+        'energy': energy,
+        'dominant_period': dominant_period,
+        'dominant_period_err': dominant_period_err,
+        'period': period,
+        'global_ws': global_ws,
+        'best_fit': best_fit,
+        }
     
-    class emd_period_energy(NamedTuple):
-        energy: float
-        dominant_period: float
-        dominant_period_err: float
-        period: list
-        global_ws: list
-        best_fit: list
-        
-    emd_period_energy = emd_period_energy(energy, dominant_period, dominant_period_err, period, global_ws, best_fit)
-    
-    return emd_period_energy
+    return emd_period_energy_result

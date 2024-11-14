@@ -12,7 +12,6 @@ from confEMD.emd_period_energy import emd_period_energy
 import matplotlib.pyplot as plt
 from scipy.stats import chi2
 from scipy.optimize import curve_fit
-from typing import NamedTuple
 
         
 def chisqr_pdf(x, mean_energy, dof):
@@ -206,7 +205,7 @@ def emd_noise_conf(t, alpha, period1, period2, num_samples=500, signal_energy=1,
     
     Returns
     -------
-    emd_noise_conf : NamedTuple
+    emd_noise_conf_result : dict
         Attributes
         ----------
         up : numpy array
@@ -261,8 +260,8 @@ def emd_noise_conf(t, alpha, period1, period2, num_samples=500, signal_energy=1,
             s = modes[:,j]
             emd_period_energy_result = emd_period_energy(s, t)
         
-            period = np.append(period, emd_period_energy_result.dominant_period)
-            energy = np.append(energy, emd_period_energy_result.energy)
+            period = np.append(period, emd_period_energy_result['dominant_period'])
+            energy = np.append(energy, emd_period_energy_result['energy'])
             mode_n = np.append(mode_n, j+1)
             
     
@@ -289,19 +288,17 @@ def emd_noise_conf(t, alpha, period1, period2, num_samples=500, signal_energy=1,
         up[j] = chi2.ppf(1-fap*0.5, dof[j])*mean_energy[j]/dof[j]
         
         
-    class emd_noise_conf(NamedTuple):
-        up: list
-        down: list
-        dof: list
-        mean_energy: list
-        period: list
-        mean_period_pt: list
-        mean_energy_pt: list
+    emd_noise_conf_result = {
+        'up': up,
+        'down': down,
+        'dof': dof,
+        'mean_energy': mean_energy,
+        'period': period,
+        'mean_period_pt': mean_period_pt,
+        'mean_energy_pt': mean_energy_pt,
+        }
         
-    emd_noise_conf = emd_noise_conf(up, down, dof, mean_energy, period, 
-                                    mean_period_pt, mean_energy_pt)
-
-    return emd_noise_conf
+    return emd_noise_conf_result
 
     
     

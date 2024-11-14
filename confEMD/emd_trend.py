@@ -32,7 +32,7 @@ def emd_trend(modes, t, cutoff=0.4):
     dt = t[1]-t[0]
     sp = emd_energy_spectrum(modes, t, plot_fitting=False)
     length_mode = len(modes[:,0])*dt  #length of mode (time duration)
-    ind = np.where(sp.period > cutoff*length_mode)[0] 
+    ind = np.where(sp['period'] > cutoff*length_mode)[0] 
     result = np.zeros(len(modes[:,0]))
     for i in ind:
         result += modes[:,i]

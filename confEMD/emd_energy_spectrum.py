@@ -7,7 +7,6 @@ Created on Thu Oct  3 16:54:51 2024
 
 import numpy as np
 from confEMD.emd_period_energy import emd_period_energy
-from typing import NamedTuple
 import matplotlib.pyplot as plt
 
 def emd_energy_spectrum(modes, t, plot_fitting=False):
@@ -29,7 +28,7 @@ def emd_energy_spectrum(modes, t, plot_fitting=False):
 
     Returns
     -------
-    emd_energy_spectrum : NamedTuple
+    emd_energy_spectrum_result : dict
         Attributes
         ----------
         period : numpy array
@@ -58,11 +57,11 @@ def emd_energy_spectrum(modes, t, plot_fitting=False):
         s = modes[:,i]
         
         emd_period_energy_result = emd_period_energy(s, t)
-        period[i] = emd_period_energy_result.dominant_period
-        period_err[i] = emd_period_energy_result.dominant_period_err
-        period_modes[i] = emd_period_energy_result.period
-        global_ws[i] = emd_period_energy_result.global_ws
-        best_fit[i] = emd_period_energy_result.best_fit
+        period[i] = emd_period_energy_result['dominant_period']
+        period_err[i] = emd_period_energy_result['dominant_period_err']
+        period_modes[i] = emd_period_energy_result['period']
+        global_ws[i] = emd_period_energy_result['global_ws']
+        best_fit[i] = emd_period_energy_result['best_fit']
         energy[i] = N*np.std(s)**2 
     
     #Calculate spectral density
@@ -86,12 +85,11 @@ def emd_energy_spectrum(modes, t, plot_fitting=False):
         plt.tight_layout()
         plt.show()
         
-    
-    class emd_energy_spectrum(NamedTuple):
-        period: list
-        period_err: list
-        energy: list
         
-    emd_energy_spectrum = emd_energy_spectrum(period, period_err, energy)
-    
-    return emd_energy_spectrum
+    emd_energy_spectrum_result = {
+        'period': period,
+        'period_err': period_err,
+        'energy': energy,
+        }
+        
+    return emd_energy_spectrum_result
