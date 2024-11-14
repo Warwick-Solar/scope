@@ -103,7 +103,7 @@ sp = emd_energy_spectrum(modes, t, plot_fitting=True)
 cutoff_period = 0.4 * len(x) * dt #show cutoff period
 
 #plot EMD spectrum
-plt.errorbar(sp.period, sp.energy, xerr=sp.period_err, label='EMD Spectrum', fmt='.', color='green', ms=15, capsize=5, mew=2)
+plt.errorbar(sp['period'], sp['energy'], xerr=sp['period_err'], label='EMD Spectrum', fmt='.', color='green', ms=15, capsize=5, mew=2)
 plt.axvline(x = cutoff_period, color = 'black', linestyle='dashed') #cutoff period = 0.4*(mode length)
 
 plt.xscale('log')
@@ -136,7 +136,7 @@ conf_down = conf_c['down'] + conf_w['down']
 
 conf_period = conf_c['period']
 
-conf_mean = conf_c.mean_energy + conf_w.mean_energy
+conf_mean = conf_c['mean_energy'] + conf_w['mean_energy']
 
 #%%
 #Plot EMD spectrum with confidence limits
