@@ -8,8 +8,8 @@ Created on Thu Oct 24 21:23:28 2024
 import numpy as np
 import colorednoise as cn
 import emd
-from emd_period_energy import emd_period_energy
-from emd_noise_conf import emd_noise_conf
+from confEMD.emd_period_energy import emd_period_energy
+from confEMD.emd_noise_conf import emd_noise_conf
 import matplotlib.pyplot as plt
 
 
