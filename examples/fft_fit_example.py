@@ -11,7 +11,7 @@ import colorednoise as cn
 import matplotlib.pyplot as plt
 import emd
 from confEMD.fit_fourier import fit_fourier
-from confEMD.plot import plot_signal, plot_spectrum
+from confEMD.plot import plot_signal, plot_fft_spectrum
 
 
 #%% only white noise
@@ -31,7 +31,7 @@ x -= np.mean(x) #set mean to zero
 
 fit_fft = fit_fourier(x, dt, fap=0.05)
 
-plot_spectrum(fit_fft)
+plot_fft_spectrum(fit_fft)
 
 #%% only red noise
 
@@ -50,7 +50,7 @@ x -= np.mean(x) #set mean to zero
 
 fit_fft = fit_fourier(x, dt, fap=0.05)
 
-plot_spectrum(fit_fft)
+plot_fft_spectrum(fit_fft)
 
 #%% white + red noise
 
@@ -69,7 +69,7 @@ x -= np.mean(x) #set mean to zero
 
 fit_fft = fit_fourier(x, dt, fap=0.05)
 
-plot_spectrum(fit_fft)
+plot_fft_spectrum(fit_fft)
 
 #%% white + red noise + oscillatory signal
 
@@ -90,7 +90,7 @@ x -= np.mean(x) #set mean to zero
 
 fit_fft = fit_fourier(x, dt, fap=0.05)
 
-plot_spectrum(fit_fft)
+plot_fft_spectrum(fit_fft)
 
 
 #%%
