@@ -84,6 +84,7 @@ emd_sp = emd_energy_spectrum(modes, t, plot_fitting=True)
 
 cutoff_period = 0.4 * len(x) * dt #show cutoff period
 
+
 plot_emd_spectrum(emd_sp, cutoff_period)
 
 #%%############################################################################
