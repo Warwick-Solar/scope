@@ -17,10 +17,10 @@ Cite all the papers you need as [Kolotkov et al. (2016)](	https://doi.org/10.105
 - [License](#license)
 
 ## Prerequisites
-- Feel blank
+- Leave blank
 
 ## Installation
- - Feel blank
+ - Leave blank
 
 ## Example
 Place here your tutorial base on your emd example
@@ -35,10 +35,10 @@ To insert you plots, use the command below (use should place your plot into the 
 ![](./use-case/sun.jpg)
 
 ## Contributing
-Feel blank
+Leave blank
 
 ## Acknowledgements
-Feel blank
+Leave blank
 
 ## License
 This project is licensed under the Apache 2.0. License - see the [LICENSE.md](./LICENSE) file for details
