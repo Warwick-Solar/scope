@@ -23,7 +23,7 @@ N = 300 #number of data points
 dt = L / N 
 
 t = dt * np.arange(N)
-start_time = np.max(t) * 0.05 
+# start_time = np.max(t) * 0.05 
 decay_time = np.max(t) * 0.3
 
 trend = np.exp(-t/decay_time)
