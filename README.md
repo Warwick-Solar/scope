@@ -24,6 +24,16 @@ The project consists of three main parts:
  - Leave blank
 
 ## Example
+The sample signal in this example consists of an oscillatory component, a decaying trend and some random noise signals:
+![](./use-case/)
+
+After setting the mean of the signal to zero, we apply EMD to obtain the first set of intrinsic mode functions (IMFs):
+![](./use-case/)
+
+The trend of the signal is estimated using the 'emd_trend' function. This function identifies modes with periods exceeding a fraction of the total signal duration (denoted by the 'cutoff' parameter) as the trend of the signal.
+
+
+
 Place here your tutorial base on your emd example
 
 To write any code, use this snippet
