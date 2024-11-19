@@ -13,6 +13,24 @@ import matplotlib.pyplot as plt
 from scipy.stats import chi2
 from scipy.optimize import curve_fit
 
+'''
+This script runs as follows:
+1. Input power law index and noise energy from the 'fit_fourier' function.
+2. Generate 500 (by default) noise samples with zero mean and the same energy
+    as the input.
+3. Apply Empirical Mode Decomposition (EMD) to each noise sample.
+4. Extract the dominant period and modal energy for each intrinsic mode
+    function (IMF).
+5. Since the modal energy of the mth IMF should have a chi-square distribution,
+    extract the mean period, mean energy and the number of degrees of freedom 
+    (DoF) by fitting the distribution of modal energy for each mode number. 
+    Achieved by the 'emd_noise_fit' function.
+6. Since the energy-period relation and DoF-period relation of IMF are linear 
+    in log-log scale, fit a straight line on them to obtain the exact linear 
+    relation. Generate 500 data points for the lower and upper confidence
+    limits based on the linear relation and 95% (by default) confidence level.
+    Achieved by 'make_lin_dep_loglog' and 'emd_noise_conf' separately.
+'''
         
 def chisqr_pdf(x, mean_energy, dof):
     ''' A modified chi-square distribution function to be fitted.
