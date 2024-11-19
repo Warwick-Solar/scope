@@ -306,7 +306,8 @@ def fit_fourier(x, dt, fap, plot_spectrum = False):
         'pl_index_stderr': pl_index_stderr,
         'confidence_limit': confidence_limit,
         'N_w': N_w,
-        'N_c': N_c
+        'N_c': N_c,
+        'conf_prob': 1 - fap
     }
 
     return fit_fourier_result
