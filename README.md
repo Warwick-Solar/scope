@@ -1,12 +1,13 @@
 # confEMD
-Insert a brief library description
+Empirical Mode Decomposition (EMD) technique for identifying quasi-periodic oscillations in the solar atmosphere from superimposed background noises.
 
 ## Project description
+confEMD is the project to detect quasi-periodicities in the solar atmosphere using the EMD technique. These oscillatory signals are typically accompanied by a combination of white noise and coloured noise with power law spectral dependence. To detect quasi-periodicities, we compute the EMD spectrum containing EMD-revealed modes and the confidence limits of modal energy. This allows us to identify the significant mode beyond the confidence limits, which is expected to be associated with the quasi-periodic oscillatory signal of interest.
 
-Describe the overall project. 
-
-Cite all the papers you need as [Kolotkov et al. (2016)](	https://doi.org/10.1051/0004-6361/201628306).
-
+The project consists of three main parts:
+- Estimation of power law index and noise energy using a debiased least squares fit of Fourier spectrum based on the method given by [Vaughan (2005)](https://doi.org/10.1051/0004-6361:20041453).
+- Extraction of the dominant period of EMD-revealed modes from the global wavelet spectrum produced by the Wavelet analysis package from https://github.com/ct6502/wavelets.
+- Calculation of confidence limits of EMD spectrum using the method proposed by [Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306).
 
 
 ## Table of Contents
