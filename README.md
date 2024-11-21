@@ -24,20 +24,32 @@ The project consists of three main parts:
  - Leave blank
 
 ## Example
-The sample signal in this example consists of an oscillatory component, a decaying trend and some random noise signals:
+The sample signal in this example consists of an oscillatory component, a decaying trend and some random noise signals obeying power law:
 ![](./use-case/)
 
 After setting the mean of the signal to zero, we apply EMD to obtain the first set of intrinsic mode functions (IMFs):
 ![](./use-case/)
 
-The trend of the signal is estimated using the 'emd_trend' function. This function identifies modes with periods exceeding a fraction of the total signal duration (denoted by the 'cutoff' parameter) as the trend of the signal. The (dominant) period of a mode is estimated by fitting the global wavelet spectrum of the mode with a Gaussian + Quadratic function, conducted in the 'emd_period_energy' function. The position and standard deviation of the Gaussian peak refers to the dominant period and the uncertainty of this estimation. For this simple example, the trend of the signal is simply the residual of EMD:
+The trend of the signal is estimated using the 'emd_trend' function. This function identifies modes with periods exceeding a fraction of the total signal duration (denoted by the 'cutoff' parameter) as the trend of the signal. The (dominant) period of a mode is estimated by fitting the global wavelet spectrum of the mode with a Gaussian + Quadratic function, conducted in the 'emd_period_energy' function. An example of the global wavelet spectrum fit is shown below:
+![](./use-case/)
+We can see that for each mode there is a Gaussian-like peak associated with the dominant period.
+
+The position and standard deviation of the Gaussian peak refers to the dominant period and the uncertainty of this estimation. For this simple example, the trend of the signal is simply the residual of EMD:
 ![](./use-case/)
 
 Hence the detrended signal is:
 ![](./use-case/)
 
-Now we can estimate the noise parameters of the actual part of the signal we are interested in, the detrended signal, by the 'fit_fourier' function. In the 'fit_fourier' function, we fit the FFT spectrum (in log-log scale) by a power law model with 
+Now we can estimate the noise parameters of the actual part of the signal we are interested in, the detrended signal, by the 'fit_fourier' function. In the 'fit_fourier' function, we fit the FFT spectrum by a power law model in log-log scale to extract the power law index and noise energy of the signal. Firstly, we must note that each point of the Fourier power $I(f_{j})$ follows a chi-square distribution with 2 degrees of freedom, denoted as:
+```math
+I(f_{j}) = \mathcal{P}(f_{j}) \chi_{2}^{2}/2
+```
+where $\mathcal{P}(f_{j})$ is the true power spectrum, and $\chi_{2}^{2}$ is a random variable distributed as $\chi^{2}$ with 2 degrees of freedom. Since the least squares method assumes that each point is Gaussian-distributed, we cannot directly apply this method in the FFT spectrum fitting. Instead, we should consider the mean of the $\chi_{2}^{2}/2$ term. In log scale, $\left\langle \mathrm{log}(\chi^{2}_{2}/2) \right\rangle$ = -0.25068. This term corresponds to the bias that will be introduced to the fitting if we directly implement the least squares method. Hence, we shall include this term in the model function such that the least squares fitting will not be 'biased'. 
 
+The FFT spectrum of the detrended signal below shows a combination of white and coloured noise, with the power law index of this coloured noise being 1.13$\pm$0.32. The peak outside the 95% confidence level is expected to be the period of the oscillatory signal.
+![](./use-case/)
+
+With the power law index and noise energy, we can compute the confidence limits of the EMD energy. The 'emd_noise_conf' function generates 500 (by default) noise samples with the same power law index and energy as the input. 
 
 
 
