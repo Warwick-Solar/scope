@@ -7,7 +7,7 @@ confEMD is the project to detect quasi-periodicities in the solar atmosphere usi
 The project consists of three main parts:
 - Estimation of power law index and noise energy using a debiased least squares fit of Fourier spectrum based on the method given by [Vaughan (2005)](https://doi.org/10.1051/0004-6361:20041453).
 - Extraction of the dominant period of EMD-revealed modes from the global wavelet spectrum produced by the Wavelet analysis package from https://github.com/ct6502/wavelets.
-- Calculation of confidence limits of EMD spectrum using the method proposed by [Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306).
+- Plot of EMD spectrum and calculation of confidence limits using the method proposed by [Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306).
 
 
 ## Table of Contents
@@ -49,7 +49,16 @@ where $\mathcal{P}(f_{j})$ is the true power spectrum, and $\chi_{2}^{2}$ is a r
 The FFT spectrum of the detrended signal below shows a combination of white and coloured noise, with the power law index of this coloured noise being 1.13$\pm$0.32. The peak outside the 95% confidence level is expected to be the period of the oscillatory signal.
 ![](./use-case/)
 
-With the power law index and noise energy, we can compute the confidence limits of the EMD energy. The 'emd_noise_conf' function generates 500 (by default) noise samples with the same power law index and energy as the input. 
+The EMD energy spectrum is plotted by the 'emd_energy_spectrum' function. For this example:
+![](./use-case/)
+
+With the power law index and noise energy, we can compute the confidence limits of the EMD energy spectrum. [Flandrin et al. (2004)](https://ieeexplore.ieee.org/document/1261951) and [Wu and Huang (2004)](https://royalsocietypublishing.org/doi/10.1098/rspa.2003.1221) investigate the dyadic property of EMD and suggest the following relation between modal energy and modal period:
+```math
+E_{m}P_{m} = \text{const.}
+```
+[Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306) suggests that the modal energy of the mth IMF should have a chi-square distribution with the $k$ degrees of freedom (DoF). We thus estimate the confidence limits using the percent-point function of the chi-square distribution. Here we use the false alarm probability = 0.05. The 'emd_noise_conf' function generates 500 (by default) noise samples with the same power law index and energy as the input and conducts the EMD. It extracts the dominant period and modal energy for each IMF by calling the 'emd_period_energy' function. The 'emd_noise_fit' function fits the chi-square distribution to the histogram of modal energy for each mode number to extract the mean energy and $k$. We obtain the mean period, mean energy and number of DoF for each mode number. Due to the dyadic property of EMD, we expect both mean energy vs mean period and $k$ vs mean period are linear in log-log scale. The exact linear relationship is found by fitting a straight line. By obtaining this linear relationship, we use it to generate 500 data points of the confidence limits over the whole range of period. 
+![](./use-case/)
+
 
 
 
