@@ -24,6 +24,23 @@ The project consists of three main parts:
  - Leave blank
 
 ## Example
+The sample signal in this example consists of an oscillatory component, a decaying trend and some random noise signals:
+![](./use-case/)
+
+After setting the mean of the signal to zero, we apply EMD to obtain the first set of intrinsic mode functions (IMFs):
+![](./use-case/)
+
+The trend of the signal is estimated using the 'emd_trend' function. This function identifies modes with periods exceeding a fraction of the total signal duration (denoted by the 'cutoff' parameter) as the trend of the signal. The (dominant) period of a mode is estimated by fitting the global wavelet spectrum of the mode with a Gaussian + Quadratic function, conducted in the 'emd_period_energy' function. The position and standard deviation of the Gaussian peak refers to the dominant period and the uncertainty of this estimation. For this simple example, the trend of the signal is simply the residual of EMD:
+![](./use-case/)
+
+Hence the detrended signal is:
+![](./use-case/)
+
+Now we can estimate the noise parameters of the actual part of the signal we are interested in, the detrended signal, by the 'fit_fourier' function. In the 'fit_fourier' function, we fit the FFT spectrum (in log-log scale) by a power law model with 
+
+
+
+
 Place here your tutorial base on your emd example
 
 To write any code, use this snippet
