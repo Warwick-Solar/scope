@@ -61,7 +61,7 @@ cutoff_period = 0.4 * len(x) * dt #show cutoff period
 plot_emd_spectrum(emd_sp, cutoff_period)
 ```
 ![](./use-case/emd_spectrum.png)
-The dashed line corresponds to the cutoff period adopted in 'emd_trend' function, which is 0.4, i.e. approximately 2.5 oscillations over the signal length.
+The dashed line corresponds to the cutoff period adopted in 'emd_trend' function, which is 0.4*signal length, i.e. approximately 2.5 oscillations over the signal length.
 
 With the power law index and noise energy returned by 'fit_fourier' function, we can compute the confidence limits of the EMD energy spectrum using 'emd_noise_conf' function:
 ```python
