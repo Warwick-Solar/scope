@@ -16,8 +16,8 @@ from scipy.optimize import curve_fit
 '''
 This script runs as follows:
 1. Input power law index and noise energy from the 'fit_fourier' function.
-2. Generate 500 (by default) noise samples with zero mean and the same energy
-    as the input.
+2. Generate 500 (by default) noise samples with the same power law index 
+    and energy as the input.
 3. Apply Empirical Mode Decomposition (EMD) to each noise sample.
 4. Extract the dominant period and modal energy for each intrinsic mode
     function (IMF).
