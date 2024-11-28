@@ -35,7 +35,7 @@ plot_modes(t, modes)
 where the 'sd_thresh' parameter is the threshold at which the sift of each IMF will stop. 
 ![](./use-case/1st_EMD.png)
 
-The trend of the signal is estimated using the 'emd_trend' function. This function identifies modes with periods exceeding a fraction of the total signal duration (denoted by the 'cutoff' parameter) and the residual as the trend of the signal.  
+The trend of the signal is estimated using the 'emd_trend' function. This function identifies modes with periods exceeding a fraction of the total signal duration (denoted by the 'cutoff' parameter) and the residual as the trend of the signal. This cutoff is 0.4*signal length by default, which means that mode with less than 2.5 oscillations is considered as part of the trend. 
 ```python
 modes = emd_trend(modes, t)
 trend_emd = modes[:, -1]
@@ -61,7 +61,7 @@ cutoff_period = 0.4 * len(x) * dt #show cutoff period
 plot_emd_spectrum(emd_sp, cutoff_period)
 ```
 ![](./use-case/emd_spectrum.png)
-The dashed line corresponds to the cutoff period adopted in 'emd_trend' function, which is 0.4*signal length, i.e. approximately 2.5 oscillations over the signal length.
+The dashed line corresponds to the cutoff period adopted in 'emd_trend' function, all modes beyond this line are considered as components of trend.
 
 With the power law index and noise energy returned by 'fit_fourier' function, we can compute the confidence limits of the EMD energy spectrum using 'emd_noise_conf' function:
 ```python
@@ -83,7 +83,7 @@ The modes beyond the upper confidence limit are considered as significant modes 
 
 
 
-(The (dominant) period of a mode is estimated by fitting the global wavelet spectrum of the mode with a Gaussian + Quadratic function, conducted in the 'emd_period_energy' function. An example of the global wavelet spectrum fit is shown below:
+(The (dominant) period of a mode is estimated by fitting the global wavelet spectrum of the mode with a Gaussian + Parabolic function, conducted in the 'emd_period_energy' function. An example of the global wavelet spectrum fit is shown below:
 ![](./use-case/)
 We can see that for each mode there is a Gaussian-like peak associated with the dominant period. The position and standard deviation of the Gaussian peak refers to the dominant period and the uncertainty of this estimation.)
 
@@ -92,6 +92,20 @@ We can see that for each mode there is a Gaussian-like peak associated with the 
 I(f_{j}) = \mathcal{P}(f_{j}) \chi_{2}^{2}/2
 ```
 where $\mathcal{P}(f_{j})$ is the true power spectrum, and $\chi_{2}^{2}$ is a random variable distributed as $\chi^{2}$ with 2 degrees of freedom. Since the least squares method assumes that each point is Gaussian-distributed, we cannot directly apply this method in the FFT spectrum fitting. Instead, we should consider the mean of the $\chi_{2}^{2}/2$ term. In log scale, $\left\langle \mathrm{log}(\chi^{2}_{2}/2) \right\rangle$ = -0.25068. This term corresponds to the bias that will be introduced to the fitting if we directly implement the least squares method. Hence, we shall include this term in the model function such that the least squares fitting will not be 'biased'.) 
+
+(A more intuitive way of explaining this bias factor is given as follows. Since the Fourier power follows a chi-square distribution with 2 DoF is essentially an exponential function, we consider the integration of an exponential function over the entire range of power, which gives a constant value:
+```math
+\int_{0}^{P_{\mathrm{max}}} e^{-x} dx = const.
+```
+One can transform it to log scale by considering a new variable $τ = lnx$. Hence, the new integral becomes:
+```math
+\int_{-\infty}^{\mathrm{ln} P_{\mathrm{max}}} e^{-e^{\tau}} e^{\tau} d\tau = const.
+```
+where $F(\tau) = e^{-e^{\tau}} e^{\tau}$ is the distribution of the Fourier power in log scale. By plotting this function we see an asymmetric distribution with its mean positioned at -0.25068.
+![](./use-case/)
+
+)
+
 
 ([Flandrin et al. (2004)](https://ieeexplore.ieee.org/document/1261951) and [Wu and Huang (2004)](https://royalsocietypublishing.org/doi/10.1098/rspa.2003.1221) investigate the dyadic property of EMD and suggest the following relation between modal energy and modal period:
 ```math
