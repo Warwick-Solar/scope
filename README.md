@@ -68,23 +68,23 @@ With the power law index and noise energy returned by 'fit_fourier' function, we
 # false alarm probability
 fap = 0.05
 #Confidence limits for coloured noise
-conf_c = emd_noise_conf(t, alpha=alpha, period1=2*dt, 
-                        period2=N*dt, num_samples=100, 
+conf_c = emd_noise_conf(t, alpha=alpha, period_min=2*dt, 
+                        period_max=N*dt, num_samples=100, 
                         signal_energy=fit_fft['color_energy'], fap=fap)
 #Confidence limits for white noise
 if fit_fft['white_energy'] > 0: # check if there is only colored noise model
-    conf_w = emd_noise_conf(t, alpha=0, period1=2*dt,
-                            period2=N*dt, num_samples = 100, 
+    conf_w = emd_noise_conf(t, alpha=0, period_min=2*dt,
+                            period_max=N*dt, num_samples = 100, 
                             signal_energy=fit_fft['white_energy'], fap=fap)
 ```
-Here the false alarm probability is set to 0.05. The 'emd_noise_conf' function generates 100 noise samples with the same power law index ('alpha') and energy ('signal_energy') as the input. The other two parameters 'period1' and 'period2' set the range of period over which the confidence limits will be computed. The EMD energy spectrum with confidence limits is given by:
+Here the false alarm probability is set to 0.05. The 'emd_noise_conf' function generates 100 noise samples with the same power law index ('alpha') and energy ('signal_energy') as the input. The other two parameters 'period_min' and 'period_max' set the range of period over which the confidence limits will be computed. The EMD energy spectrum with confidence limits is given by:
 ![](./use-case/emd_spectrum_conf.png)
 The modes beyond the upper confidence limit are considered as significant modes that may not be considered as random noise.
 
 
 
 (The (dominant) period of a mode is estimated by fitting the global wavelet spectrum of the mode with a Gaussian + Parabolic function, conducted in the 'emd_period_energy' function. An example of the global wavelet spectrum fit is shown below:
-![](./use-case/)
+![](./use-case/fit_mode.png)
 We can see that for each mode there is a Gaussian-like peak associated with the dominant period. The position and standard deviation of the Gaussian peak refers to the dominant period and the uncertainty of this estimation.)
 
 (In the 'fit_fourier' function, we fit the FFT spectrum by a power law model in log-log scale to extract the power law index and noise energy of the signal. Firstly, we must note that each point of the Fourier power $I(f_{j})$ follows a chi-square distribution with 2 degrees of freedom, denoted as:
@@ -101,10 +101,8 @@ One can transform it to log scale by considering a new variable $τ = lnx$. Henc
 ```math
 \int_{-\infty}^{\mathrm{ln} P_{\mathrm{max}}} e^{-e^{\tau}} e^{\tau} d\tau = const.
 ```
-where $F(\tau) = e^{-e^{\tau}} e^{\tau}$ is the distribution of the Fourier power in log scale. By plotting this function we see an asymmetric distribution with its mean positioned at -0.25068.
-![](./use-case/)
-
-)
+where $F(\tau) = e^{-e^{\tau}} e^{\tau}$ is the distribution of the Fourier power in log scale. By plotting this function we see an asymmetric distribution with its mean positioned at -0.25068.)
+![](./use-case/bias_visualisation.png)
 
 
 ([Flandrin et al. (2004)](https://ieeexplore.ieee.org/document/1261951) and [Wu and Huang (2004)](https://royalsocietypublishing.org/doi/10.1098/rspa.2003.1221) investigate the dyadic property of EMD and suggest the following relation between modal energy and modal period:
@@ -112,17 +110,6 @@ where $F(\tau) = e^{-e^{\tau}} e^{\tau}$ is the distribution of the Fourier powe
 E_{m}P_{m} = \text{const.}
 ```
 [Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306) suggests that the modal energy of the mth IMF should have a chi-square distribution with the $k$ degrees of freedom (DoF). We thus estimate the confidence limits using the percent-point function of the chi-square distribution. Here we use the false alarm probability = 0.05. The 'emd_noise_conf' function generates 500 (by default) noise samples with the same power law index and energy as the input and conducts the EMD. It extracts the dominant period and modal energy for each IMF by calling the 'emd_period_energy' function. The 'emd_noise_fit' function fits the chi-square distribution to the histogram of modal energy for each mode number to extract the mean energy and $k$. We obtain the mean period, mean energy and number of DoF for each mode number. Due to the dyadic property of EMD, we expect both mean energy vs mean period and $k$ vs mean period are linear in log-log scale. The exact linear relationship is found by fitting a straight line. By obtaining this linear relationship, we use it to generate 500 data points of the confidence limits over the whole range of period.) 
-
-Place here your tutorial base on your emd example
-
-To write any code, use this snippet
-```python
-import numpy as np
-
-array = np.array([0, 1, 2)]
-```
-To insert you plots, use the command below (use should place your plot into the use-case folder):
-![](./use-case/sun.jpg)
 
 ## Contributing
 Leave blank
