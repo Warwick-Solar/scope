@@ -93,13 +93,13 @@ plot_emd_spectrum(emd_sp, cutoff_period)
 fap = 0.05
 
 #Confidence limits for coloured noise
-conf_c = emd_noise_conf(t, alpha=alpha, period1=2*dt, 
-                        period2=N*dt, num_samples=100, 
+conf_c = emd_noise_conf(t, alpha=alpha, period_min=2*dt, 
+                        period_max=N*dt, num_samples=100, 
                         signal_energy=fit_fft['color_energy'], fap=fap)
 #Confidence limits for white noise
 if fit_fft['white_energy'] > 0: # check if there is only colored noise model
-    conf_w = emd_noise_conf(t, alpha=0, period1=2*dt,
-                            period2=N*dt, num_samples = 100, 
+    conf_w = emd_noise_conf(t, alpha=0, period_min=2*dt,
+                            period_max=N*dt, num_samples = 100, 
                             signal_energy=fit_fft['white_energy'], fap=fap)
 
 #Upper confidence limit for the combined noises

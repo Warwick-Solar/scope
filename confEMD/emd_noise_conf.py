@@ -59,7 +59,7 @@ def chisqr_pdf(x, mean_energy, dof):
     f = (dof/mean_energy)*chi2.pdf(y, dof)
     return f
 
-def make_lin_dep_loglog(period, value, period1, period2, n_conf):
+def make_lin_dep_loglog(period, value, period_min, period_max, n_conf):
     ''' Fits a linear function in log-log scale.
     
     This function fits the input data points in log-log scale and generates
@@ -71,9 +71,9 @@ def make_lin_dep_loglog(period, value, period1, period2, n_conf):
         Modal period
     value : numpy array
         Dependent variable (Energy or DoF)
-    period1 : float
+    period_min : float
         Period interval to make a fitted dependence
-    period2 : float
+    period_max : float
         Period interval to make a fitted dependence
     n_conf : int
         Length of the array to generate
@@ -89,7 +89,7 @@ def make_lin_dep_loglog(period, value, period1, period2, n_conf):
     
     params = np.polyfit(np.log(period), np.log(value), 1)
     
-    p = np.exp(np.linspace(np.log(period1), np.log(period2), n_conf)) 
+    p = np.exp(np.linspace(np.log(period_min), np.log(period_max), n_conf)) 
     v = np.exp(params[1]) * p**params[0]
     return p, v
 
@@ -199,7 +199,7 @@ def emd_noise_fit(period, energy, mode_n):
         
     return mean_energy, dof, mean_period
 
-def emd_noise_conf(t, alpha, period1, period2, num_samples=500, signal_energy=1, fap=0.01):
+def emd_noise_conf(t, alpha, period_min, period_max, num_samples=500, signal_energy=1, fap=0.01):
     '''Computes confidence limits for EMD power spectrum.
     
     This function computes confidence limits based on the dyadic property of EMD. 
@@ -210,9 +210,9 @@ def emd_noise_conf(t, alpha, period1, period2, num_samples=500, signal_energy=1,
         Time
     alpha : float
         Power law index 
-    period1 : float
+    period_min : float
         Period interval to make a fitted dependence
-    period2 : float
+    period_max : float
         Period interval to make a fitted dependence
     num_samples : int, optional
         Number of synthetic noise signals to generate. The default is 500.
@@ -251,8 +251,8 @@ def emd_noise_conf(t, alpha, period1, period2, num_samples=500, signal_energy=1,
     # dt = L/N
     # t = dt * np.arange(N)
     # fap = 0.01
-    # period1 = 2*dt
-    # period2 = N*dt
+    # period_min = 2*dt
+    # period_max = N*dt
     
     
     N = len(t) #length of time series
@@ -296,8 +296,8 @@ def emd_noise_conf(t, alpha, period1, period2, num_samples=500, signal_energy=1,
     # plt.scatter(mean_period[ind], mean_energy[ind])
     
     #Fit mean modal energy and dof vs mean modal period 
-    period, dof = make_lin_dep_loglog(mean_period[ind], dof[ind], period1, period2, n_conf) 
-    _, mean_energy = make_lin_dep_loglog(mean_period[ind], mean_energy[ind], period1, period2, n_conf)
+    period, dof = make_lin_dep_loglog(mean_period[ind], dof[ind], period_min, period_max, n_conf) 
+    _, mean_energy = make_lin_dep_loglog(mean_period[ind], mean_energy[ind], period_min, period_max, n_conf)
     
     up = np.zeros(n_conf) #upper confidence limits
     down = np.zeros(n_conf) #lower confidence limits
