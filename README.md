@@ -47,7 +47,7 @@ For this simple example, the trend of the signal is simply the residual of EMD:
 Hence the detrended signal is:
 ![](./use-case/detrended_signal.png)
 
-Now we can estimate the noise parameters of the actual part of the signal we are interested in, the detrended signal, by the 'fit_fourier' function. The function returns the noise parameters of coloured noise and white noise (if present). For this example, the FFT spectrum of the detrended signal shows a combination of white and coloured noise, with the power law index of this coloured noise being 1.13$\pm$0.32. The peak outside the 95% confidence level (false alarm probability = 0.05) is expected to be the period of the oscillatory signal.
+Now we can estimate the noise parameters of the actual part of the signal we are interested in, the detrended signal, by the 'fit_fourier' function. The function returns the noise parameters of coloured noise and white noise (if present). For this example, the FFT spectrum of the detrended signal shows a combination of white and coloured noise, with the power law index of this coloured noise being 1.61±0.49. The peak outside the 95% confidence level (false alarm probability = 0.05) is expected to be the period of the oscillatory signal.
 ```python
 fit_fft = fit_fourier(x, dt, fap=0.05)
 plot_fft_spectrum(fit_fft)
@@ -69,31 +69,30 @@ With the power law index and noise energy returned by 'fit_fourier' function, we
 fap = 0.05
 #Confidence limits for coloured noise
 conf_c = emd_noise_conf(t, alpha=alpha, period_min=2*dt, 
-                        period_max=N*dt, num_samples=100, 
+                        period_max=N*dt, num_samples=500, 
                         signal_energy=fit_fft['color_energy'], fap=fap)
 #Confidence limits for white noise
 if fit_fft['white_energy'] > 0: # check if there is only colored noise model
     conf_w = emd_noise_conf(t, alpha=0, period_min=2*dt,
-                            period_max=N*dt, num_samples = 100, 
+                            period_max=N*dt, num_samples = 500, 
                             signal_energy=fit_fft['white_energy'], fap=fap)
 ```
-Here the false alarm probability is set to 0.05. The 'emd_noise_conf' function generates 100 noise samples with the same power law index ('alpha') and energy ('signal_energy') as the input. The other two parameters 'period_min' and 'period_max' set the range of period over which the confidence limits will be computed. The EMD energy spectrum with confidence limits is given by:
-![](./use-case/emd_spectrum_conf.png)
+Here the false alarm probability (fap) is set to 0.05. The 'emd_noise_conf' function generates 500 noise samples with the same power law index ('alpha') and energy ('signal_energy') as the input. The other two parameters 'period_min' and 'period_max' set the range of period over which the confidence limits will be computed. The EMD energy spectrum with confidence limits is given by:
+![](./use-case/emd_spectrum_with_conf.png)
 The modes beyond the upper confidence limit are considered as significant modes that may not be considered as random noise.
 
-
-
-(The (dominant) period of a mode is estimated by fitting the global wavelet spectrum of the mode with a Gaussian + Parabolic function, conducted in the 'emd_period_energy' function. An example of the global wavelet spectrum fit is shown below:
+## Description of Functions 
+As mentioned in the examples section, the 'emd_trend' function selects trends using modal period. The (dominant) period of a mode is estimated by fitting the global wavelet spectrum of the mode with a Gaussian + Parabolic function, conducted in the 'emd_period_energy' function. An example of the global wavelet spectrum fit is shown below:
 ![](./use-case/fit_mode.png)
-We can see that for each mode there is a Gaussian-like peak associated with the dominant period. The position and standard deviation of the Gaussian peak refers to the dominant period and the uncertainty of this estimation.)
+We can see that for each mode there is a Gaussian-like peak associated with the dominant period. The position and standard deviation of the Gaussian peak refers to the dominant period and the uncertainty of this estimation.
 
-(In the 'fit_fourier' function, we fit the FFT spectrum by a power law model in log-log scale to extract the power law index and noise energy of the signal. Firstly, we must note that each point of the Fourier power $I(f_{j})$ follows a chi-square distribution with 2 degrees of freedom, denoted as:
+In the 'fit_fourier' function, we fit the FFT spectrum by a power law model in log-log scale to extract the power law index and noise energy of the signal. Firstly, we must note that each point of the Fourier power $I(f_{j})$ follows a chi-square distribution with 2 degrees of freedom, denoted as:
 ```math
 I(f_{j}) = \mathcal{P}(f_{j}) \chi_{2}^{2}/2
 ```
-where $\mathcal{P}(f_{j})$ is the true power spectrum, and $\chi_{2}^{2}$ is a random variable distributed as $\chi^{2}$ with 2 degrees of freedom. Since the least squares method assumes that each point is Gaussian-distributed, we cannot directly apply this method in the FFT spectrum fitting. Instead, we should consider the mean of the $\chi_{2}^{2}/2$ term. In log scale, $\left\langle \mathrm{log}(\chi^{2}_{2}/2) \right\rangle$ = -0.25068. This term corresponds to the bias that will be introduced to the fitting if we directly implement the least squares method. Hence, we shall include this term in the model function such that the least squares fitting will not be 'biased'.) 
+where $\mathcal{P}(f_{j})$ is the true power spectrum, and $\chi_{2}^{2}$ is a random variable distributed as $\chi^{2}$ with 2 degrees of freedom. Since the least squares method assumes that each point is Gaussian-distributed, we cannot directly apply this method in the FFT spectrum fitting. Instead, we should consider the mean of the $\chi_{2}^{2}/2$ term. In log scale, $\left\langle \mathrm{log}(\chi^{2}_{2}/2) \right\rangle$ = -0.25068. This term corresponds to the bias that will be introduced to the fitting if we directly implement the least squares method. Hence, we shall include this term in the model function such that the least squares fitting will not be 'biased'.
 
-(A more intuitive way of explaining this bias factor is given as follows. Since the Fourier power follows a chi-square distribution with 2 DoF is essentially an exponential function, we consider the integration of an exponential function over the entire range of power, which gives a constant value:
+Additionally, we can visualise this bias factor. Since the Fourier power follows a chi-square distribution with 2 DoF is essentially an exponential function, we consider the integration of an exponential function over the entire range of power, which gives a constant value:
 ```math
 \int_{0}^{P_{\mathrm{max}}} e^{-x} dx = const.
 ```
@@ -101,15 +100,25 @@ One can transform it to log scale by considering a new variable $τ = lnx$. Henc
 ```math
 \int_{-\infty}^{\mathrm{ln} P_{\mathrm{max}}} e^{-e^{\tau}} e^{\tau} d\tau = const.
 ```
-where $F(\tau) = e^{-e^{\tau}} e^{\tau}$ is the distribution of the Fourier power in log scale. By plotting this function we see an asymmetric distribution with its mean positioned at -0.25068.)
+where $F(\tau) = e^{-e^{\tau}} e^{\tau}$ is the distribution of the Fourier power in log scale. By plotting this function we see an asymmetric distribution with its mean positioned at -0.25068.
 ![](./use-case/bias_visualisation.png)
 
+The power law model is a superposition of white and coloured noises, given by:
+```math
+ \mathcal{P}(f) = \mathcal{P}_{c}(f) + \mathcal{P}_{w}(f) = N_{c} f^{-\alpha_{c}} + N_{w}
+```
+where $N_{c}$ and $N_{w}$ are the proportionality constants of coloured and white noises respectively, and $\alpha_{c}$ is the power law index of coloured noise. After obtaining the proportionality constants from the debiased least squares fit, we can estimate the energy of each noise type using:
+```math
+\text{Energy} = N \cdot nf \cdot N_{c/w} 
+```
+where $N$ is the number of data points in time series and $nf$ is the number of Fourier frequencies, which does not include 0 Hz and the Nyquist frequency.
 
-([Flandrin et al. (2004)](https://ieeexplore.ieee.org/document/1261951) and [Wu and Huang (2004)](https://royalsocietypublishing.org/doi/10.1098/rspa.2003.1221) investigate the dyadic property of EMD and suggest the following relation between modal energy and modal period:
+The 'emd_noise_conf' function is explained as follows:
+[Flandrin et al. (2004)](https://ieeexplore.ieee.org/document/1261951) and [Wu and Huang (2004)](https://royalsocietypublishing.org/doi/10.1098/rspa.2003.1221) investigate the dyadic property of EMD and suggest the following relation between modal energy and modal period:
 ```math
 E_{m}P_{m} = \text{const.}
 ```
-[Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306) suggests that the modal energy of the mth IMF should have a chi-square distribution with the $k$ degrees of freedom (DoF). We thus estimate the confidence limits using the percent-point function of the chi-square distribution. Here we use the false alarm probability = 0.05. The 'emd_noise_conf' function generates 500 (by default) noise samples with the same power law index and energy as the input and conducts the EMD. It extracts the dominant period and modal energy for each IMF by calling the 'emd_period_energy' function. The 'emd_noise_fit' function fits the chi-square distribution to the histogram of modal energy for each mode number to extract the mean energy and $k$. We obtain the mean period, mean energy and number of DoF for each mode number. Due to the dyadic property of EMD, we expect both mean energy vs mean period and $k$ vs mean period are linear in log-log scale. The exact linear relationship is found by fitting a straight line. By obtaining this linear relationship, we use it to generate 500 data points of the confidence limits over the whole range of period.) 
+[Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306) suggests that the modal energy of the mth IMF should have a chi-square distribution with the $k$ degrees of freedom (DoF). We thus estimate the confidence limits using the percent-point function of the chi-square distribution. Here we use the false alarm probability = 0.05. The 'emd_noise_conf' function generates 500 (by default) noise samples with the same power law index and energy as the input and conducts the EMD. It extracts the dominant period and modal energy for each IMF by calling the 'emd_period_energy' function. The 'emd_noise_fit' function fits the chi-square distribution to the histogram of modal energy for each mode number to extract the mean energy and $k$. We obtain the mean period, mean energy and number of DoF for each mode number. Due to the dyadic property of EMD, we expect both mean energy vs mean period and $k$ vs mean period are linear in log-log scale. The exact linear relationship is found by fitting a straight line. By obtaining this linear relationship, we use it to generate 500 data points of the confidence limits over the whole range of period.
 
 ## Contributing
 Leave blank
