@@ -17,20 +17,34 @@ from confEMD.emd_noise_conf import emd_noise_conf
 from confEMD.plot import plot_modes, plot_signal, plot_fft_spectrum, plot_emd_spectrum
 
 
-#Generate time series
-L = 30 #length of time series
-N = 300 #number of data points 
-dt = L / N 
+# #Generate time series
+# L = 30 #length of time series
+# N = 300 #number of data points 
+# dt = L / N 
 
-t = dt * np.arange(N)
-# start_time = np.max(t) * 0.05 
-decay_time = np.max(t) * 0.3
+# t = dt * np.arange(N)
+# # start_time = np.max(t) * 0.05 
+# decay_time = np.max(t) * 0.3
 
-trend = np.exp(-t/decay_time)
-signal = 0.1 * np.sin(2*np.pi*(1/6)*t) #freq=5/30
-noise = 0.06 * cn.powerlaw_psd_gaussian(0, t.size) + 0.1 * cn.powerlaw_psd_gaussian(2, t.size)
+# trend = np.exp(-t/decay_time)
+# signal = 0.1 * np.sin(2*np.pi*(1/6)*t) #freq=5/30
+# noise = 0.06 * cn.powerlaw_psd_gaussian(0, t.size) + 0.1 * cn.powerlaw_psd_gaussian(2, t.size)
 
-x = trend + signal + noise
+# x = trend + signal + noise
+
+# plt.plot(t, x)
+# plt.plot(t, trend)
+# plt.plot(t, trend+signal)
+# plt.xlabel('Time')
+# plt.ylabel('Amplitude')
+# plt.title('Input Signal')
+# plt.show()
+
+# np.savetxt('examples/example data', (t, trend, signal, x))
+
+#%%############################################################################
+#Load example data file
+t, trend, signal, x = np.loadtxt('examples/example data')
 
 plt.plot(t, x)
 plt.plot(t, trend)
@@ -40,9 +54,11 @@ plt.ylabel('Amplitude')
 plt.title('Input Signal')
 plt.show()
 
-x -= np.mean(x) #set mean to zero
-
 #%%############################################################################
+
+dt = t[1]-t[0]
+N = len(x) #number of data points 
+x -= np.mean(x) #set mean to zero
 
 #Calculate EMD modes and trend
 modes = emd_modes(x, sd_thresh=1e-4)
