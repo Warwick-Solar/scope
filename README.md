@@ -111,7 +111,7 @@ where $N_{c}$ and $N_{w}$ are the proportionality constants of coloured and whit
 ```math
 \text{Energy} = N \cdot nf \cdot N_{c/w} 
 ```
-where $N$ is the number of data points in time series and $nf$ is the number of Fourier frequencies, which does not include 0 Hz and the Nyquist frequency.
+where $N$ is the number of data points in time series and $nf$ is the number of Fourier frequencies, which does not include 0 Hz and Nyquist frequency.
 
 The 'emd_noise_conf' function is explained as follows:
 [Flandrin et al. (2004)](https://ieeexplore.ieee.org/document/1261951) and [Wu and Huang (2004)](https://royalsocietypublishing.org/doi/10.1098/rspa.2003.1221) investigate the dyadic property of EMD and suggest the following relation between modal energy and modal period:
