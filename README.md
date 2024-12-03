@@ -24,7 +24,7 @@ The project consists of three main parts:
  - Leave blank
 
 ## Example
-The sample signal in this example consists of an oscillatory component, a decaying trend and some random noise signals obeying power law:
+The sample signal in this example consists of an oscillatory component, a decaying trend and some random noise signals obeying power law: \
 ![](./use-case/input_signal.png)
 
 After setting the mean of the signal to zero, we apply EMD to obtain the first set of intrinsic mode functions (IMFs):
@@ -41,10 +41,10 @@ modes = emd_trend(modes, t)
 trend_emd = modes[:, -1]
 plot_signal(t, trend_emd, 'Trend of the signal')
 ```
-For this simple example, the trend of the signal is simply the residual of EMD:
+For this simple example, the trend of the signal is simply the residual of EMD: \
 ![](./use-case/trend_signal.png)
 
-Hence the detrended signal is:
+Hence the detrended signal is: \
 ![](./use-case/detrended_signal.png)
 
 Now we can estimate the noise parameters of the actual part of the signal we are interested in, the detrended signal, by the 'fit_fourier' function. The function returns the noise parameters of coloured noise and white noise (if present). For this example, the FFT spectrum of the detrended signal shows a combination of white and coloured noise, with the power law index of this coloured noise being 1.61±0.49. The peak outside the 95% confidence level (false alarm probability = 0.05) is expected to be the period of the oscillatory signal.
@@ -60,7 +60,8 @@ emd_sp = emd_energy_spectrum(modes, t, plot_fitting=True)
 cutoff_period = 0.4 * len(x) * dt #show cutoff period
 plot_emd_spectrum(emd_sp, cutoff_period)
 ```
-![](./use-case/emd_spectrum.png)
+![](./use-case/emd_spectrum.png) 
+
 The dashed line corresponds to the cutoff period adopted in 'emd_trend' function, all modes beyond this line are considered as components of trend.
 
 With the power law index and noise energy returned by 'fit_fourier' function, we can compute the confidence limits of the EMD energy spectrum using 'emd_noise_conf' function:
@@ -77,15 +78,18 @@ if fit_fft['white_energy'] > 0: # check if there is only colored noise model
                             period_max=N*dt, num_samples = 500, 
                             signal_energy=fit_fft['white_energy'], fap=fap)
 ```
-Here the false alarm probability (fap) is set to 0.05. The 'emd_noise_conf' function generates 500 noise samples with the same power law index ('alpha') and energy ('signal_energy') as the input. The other two parameters 'period_min' and 'period_max' set the range of period over which the confidence limits will be computed. The EMD energy spectrum with confidence limits is given by:
-![](./use-case/emd_spectrum_with_conf.png)
+Here the false alarm probability (fap) is set to 0.05. The 'emd_noise_conf' function generates 500 noise samples with the same power law index ('alpha') and energy ('signal_energy') as the input. The other two parameters 'period_min' and 'period_max' set the range of period over which the confidence limits will be computed. The EMD energy spectrum with confidence limits is given by: \
+![](./use-case/emd_spectrum_with_conf.png) 
+
 The modes beyond the upper confidence limit are considered as significant modes that may not be considered as random noise.
 
 ## Description of Functions 
-As mentioned in the examples section, the 'emd_trend' function selects trends using modal period. The (dominant) period of a mode is estimated by fitting the global wavelet spectrum of the mode with a Gaussian + Parabolic function, conducted in the 'emd_period_energy' function. An example of the global wavelet spectrum fit is shown below:
+### 'emd_period_energy'
+As mentioned in the examples section, the 'emd_trend' function selects trends using modal period. The (dominant) period of a mode is estimated by fitting the global wavelet spectrum of the mode with a Gaussian + Parabolic function, conducted in the 'emd_period_energy' function. An example of the global wavelet spectrum fit is shown below: \
 ![](./use-case/fit_mode.png)
 We can see that for each mode there is a Gaussian-like peak associated with the dominant period. The position and standard deviation of the Gaussian peak refers to the dominant period and the uncertainty of this estimation.
 
+### 'fit_fourier'
 In the 'fit_fourier' function, we fit the FFT spectrum by a power law model in log-log scale to extract the power law index and noise energy of the signal. Firstly, we must note that each point of the Fourier power $I(f_{j})$ follows a chi-square distribution with 2 degrees of freedom, denoted as:
 ```math
 I(f_{j}) = \mathcal{P}(f_{j}) \chi_{2}^{2}/2
@@ -113,7 +117,7 @@ where $N_{c}$ and $N_{w}$ are the proportionality constants of coloured and whit
 ```
 where $N$ is the number of data points in time series and $nf$ is the number of Fourier frequencies, which does not include 0 Hz and Nyquist frequency.
 
-The 'emd_noise_conf' function is explained as follows:
+### 'emd_noise_conf'
 [Flandrin et al. (2004)](https://ieeexplore.ieee.org/document/1261951) and [Wu and Huang (2004)](https://royalsocietypublishing.org/doi/10.1098/rspa.2003.1221) investigate the dyadic property of EMD and suggest the following relation between modal energy and modal period:
 ```math
 E_{m}P_{m} = \text{const.}
