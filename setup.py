@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="confEMD",
+    name="scope",
     version="0.1.0",
     description="TBD",
     author="TBD",

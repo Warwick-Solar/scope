@@ -6,11 +6,10 @@ Created on Thu Oct 24 21:23:28 2024
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
 import colorednoise as cn
 import emd
-from confEMD.emd_period_energy import emd_period_energy
-from confEMD.emd_noise_conf import emd_noise_conf
-import matplotlib.pyplot as plt
+from scope.emd import emd_period_energy, emd_noise_conf
 
 
 L = 30 

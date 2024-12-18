@@ -6,7 +6,7 @@ Created on Tue Oct  1 19:20:17 2024
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from confEMD.waveletFunctions import wavelet
+from .waveletFunctions import wavelet
 from scipy import interpolate
 from lmfit.models import QuadraticModel, GaussianModel
 

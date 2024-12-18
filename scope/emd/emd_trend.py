@@ -6,7 +6,7 @@ Created on Thu Oct  3 17:31:40 2024
 """
 
 import numpy as np
-from confEMD.emd_energy_spectrum import emd_energy_spectrum
+from .emd_energy_spectrum import emd_energy_spectrum
 
 def emd_trend(modes, t, cutoff=0.4):
     """
