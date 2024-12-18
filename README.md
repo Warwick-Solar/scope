@@ -1,5 +1,5 @@
 # SCOPE
-SCOPE - Statistical Confidence of Oscillatory Processes with EMD (Empirical Mode ecomposition).
+SCOPE - Statistical Confidence of Oscillatory Processes with EMD (Empirical Mode Decomposition).
 
 ## Project description
 SCOPE is the project to detect quasi-periodicities in the solar atmosphere using the EMD technique. These oscillatory signals are typically accompanied by a combination of white noise and coloured noise with power law spectral dependence. To detect quasi-periodicities, we compute the EMD spectrum containing EMD-revealed modes and the confidence limits of modal energy. This allows us to identify the significant mode beyond the confidence limits, which is expected to be associated with the quasi-periodic oscillatory signal of interest.
