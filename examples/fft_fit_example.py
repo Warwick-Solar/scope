@@ -10,8 +10,8 @@ import numpy as np
 import colorednoise as cn
 import matplotlib.pyplot as plt
 import emd
-from confEMD.fit_fourier import fit_fourier
-from confEMD.plot import plot_signal, plot_fft_spectrum
+from scope.fourier import fit_fourier
+from scope.utils import plot_signal, plot_fft_spectrum
 
 
 #%% only white noise

@@ -8,7 +8,7 @@ Created on Tue Oct 22 13:46:50 2024
 import numpy as np
 import colorednoise as cn
 import emd
-from confEMD.emd_period_energy import emd_period_energy
+from .emd_period_energy import emd_period_energy
 import matplotlib.pyplot as plt
 from scipy.stats import chi2
 from scipy.optimize import curve_fit

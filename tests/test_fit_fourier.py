@@ -8,7 +8,7 @@ Created on Tue Nov 12 13:56:48 2024
 
 import numpy as np
 import colorednoise as cn
-from confEMD.fit_fourier import fit_fourier
+from scope.fourier import fit_fourier
 
 
 def test_slope_fit_mixed():

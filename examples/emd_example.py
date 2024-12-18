@@ -9,12 +9,9 @@ import numpy as np
 import colorednoise as cn
 import matplotlib.pyplot as plt
 
-from confEMD.fit_fourier import fit_fourier
-from confEMD.emd_modes import emd_modes
-from confEMD.emd_trend import emd_trend 
-from confEMD.emd_energy_spectrum import emd_energy_spectrum
-from confEMD.emd_noise_conf import emd_noise_conf
-from confEMD.plot import plot_modes, plot_signal, plot_fft_spectrum, plot_emd_spectrum
+from scope.fourier import fit_fourier
+from scope.emd import emd_modes, emd_trend, emd_energy_spectrum, emd_noise_conf
+from scope.utils import plot_modes, plot_signal, plot_fft_spectrum, plot_emd_spectrum
 
 
 # #Generate time series
@@ -41,6 +38,7 @@ from confEMD.plot import plot_modes, plot_signal, plot_fft_spectrum, plot_emd_sp
 # plt.show()
 
 # np.savetxt('examples/example data', (t, trend, signal, x))
+
 
 #%%############################################################################
 #Load example data file
