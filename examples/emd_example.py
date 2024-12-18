@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Oct  1 14:55:48 2024
-
-@author: Weijie Gu
-"""
-
 import numpy as np
 import colorednoise as cn
 import matplotlib.pyplot as plt

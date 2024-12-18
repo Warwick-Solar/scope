@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Oct  3 16:54:51 2024
-
-@author: Weijie Gu
-"""
-
 import numpy as np
 from .emd_period_energy import emd_period_energy
 import matplotlib.pyplot as plt

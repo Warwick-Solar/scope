@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Nov 14 13:43:19 2024
-
-@author: u2273880
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d

@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Oct  1 19:20:17 2024
-
-@author: Weijie Gu
-"""
 import numpy as np
 import matplotlib.pyplot as plt
 from .waveletFunctions import wavelet

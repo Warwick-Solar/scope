@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Oct  3 21:01:11 2024
-
-@author: Weijie Gu
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt
 from lmfit import Model

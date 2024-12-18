@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Oct  3 17:31:40 2024
-
-@author: Weijie Gu
-"""
-
 import numpy as np
 from .emd_energy_spectrum import emd_energy_spectrum
 

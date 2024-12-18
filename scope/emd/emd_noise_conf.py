@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Oct 22 13:46:50 2024
-
-@author: Weijie Gu
-"""
-
 import numpy as np
 import colorednoise as cn
 import emd
