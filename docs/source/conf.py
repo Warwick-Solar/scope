@@ -22,7 +22,8 @@ extensions = [
     'sphinx.ext.autodoc',         # Auto-generate docs from docstrings
     'sphinx.ext.napoleon',        # Support for Google/NumPy style docstrings
     'sphinx.ext.viewcode',        # Add links to source code
-    'sphinx_rtd_theme'            # Use the Read the Docs theme
+    'sphinx_rtd_theme',           # Use the Read the Docs theme
+    'sphinx.ext.mathjax',
     ]
 
 templates_path = ['_templates']
