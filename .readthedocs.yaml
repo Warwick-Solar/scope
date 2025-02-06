@@ -1,3 +1,8 @@
+build:
+  os: ubuntu-22.04  # This should be a valid OS version
+  tools:
+    python: "3.8"
+
 sphinx:
   configuration: docs/source/conf.py
 
