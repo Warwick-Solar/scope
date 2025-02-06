@@ -1,4 +1,5 @@
 build:
+  os: ubuntu-22.04  # Valid OS version
   tools:
     python: "3.8"
 
