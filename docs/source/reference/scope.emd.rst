@@ -1,10 +1,8 @@
-scope.emd package
+scope.emd module
 =================
 
-Submodules
-----------
 
-scope.emd.emd\_energy\_spectrum module
+scope.emd.emd\_energy\_spectrum submodule
 --------------------------------------
 
 .. automodule:: scope.emd.emd_energy_spectrum
@@ -12,7 +10,7 @@ scope.emd.emd\_energy\_spectrum module
    :undoc-members:
    :show-inheritance:
 
-scope.emd.emd\_modes module
+scope.emd.emd\_modes submodule
 ---------------------------
 
 .. automodule:: scope.emd.emd_modes
@@ -20,7 +18,7 @@ scope.emd.emd\_modes module
    :undoc-members:
    :show-inheritance:
 
-scope.emd.emd\_noise\_conf module
+scope.emd.emd\_noise\_conf submodule
 ---------------------------------
 
 .. automodule:: scope.emd.emd_noise_conf
@@ -28,7 +26,7 @@ scope.emd.emd\_noise\_conf module
    :undoc-members:
    :show-inheritance:
 
-scope.emd.emd\_period\_energy module
+scope.emd.emd\_period\_energy submodule
 ------------------------------------
 
 .. automodule:: scope.emd.emd_period_energy
@@ -36,7 +34,7 @@ scope.emd.emd\_period\_energy module
    :undoc-members:
    :show-inheritance:
 
-scope.emd.emd\_trend module
+scope.emd.emd\_trend submodule
 ---------------------------
 
 .. automodule:: scope.emd.emd_trend
@@ -44,7 +42,7 @@ scope.emd.emd\_trend module
    :undoc-members:
    :show-inheritance:
 
-scope.emd.waveletFunctions module
+scope.emd.waveletFunctions submodule
 ---------------------------------
 
 .. automodule:: scope.emd.waveletFunctions
@@ -52,10 +50,4 @@ scope.emd.waveletFunctions module
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
 
-.. automodule:: scope.emd.__init__
-   :members:
-   :undoc-members:
-   :show-inheritance:
