@@ -20,5 +20,5 @@ setup(
        'numpy>=1.26.4',
        'lmfit>=1.3.2'
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.8",
 )
