@@ -51,7 +51,7 @@ trend_emd = modes[:, -1]
 
 fig, ax = plt.subplots(1)
 ax.plot(t, x, alpha=0.8)
-plot_signal(t, trend_emd, 'Trend of the signal', ax=ax)
+plot_signal(t, trend_emd, 'Empirical trend of the signal', ax=ax)
 
 #subtract this trend from the signal 
 x = x - trend_emd
