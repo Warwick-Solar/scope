@@ -68,7 +68,7 @@ def plot_fft_spectrum(fit_fft):
     plt.show()
 
 
-def plot_signal(t, x, title='Input signal'):
+def plot_signal(t, x, title='Input signal', ax=None):
     """
     Plots the input signal over time.
 
@@ -78,6 +78,10 @@ def plot_signal(t, x, title='Input signal'):
         Time values for the signal, used as the x-axis in the plot.
     x : numpy array
         Signal values corresponding to each time point in `t`, used as the y-axis in the plot.
+    title : string
+        Tittle of the plot
+    ax : matplotlib.axes.Axes
+        Axis to alight the plot with other plots
 
     Returns
     -------
@@ -91,7 +95,10 @@ def plot_signal(t, x, title='Input signal'):
     The x-axis represents time, and the y-axis represents the signal magnitude.
 
     """
-    plt.plot(t, x)
+    if ax is None:
+        fig, ax = plt.subplots(1)
+        
+    ax.plot(t, x)
     plt.xlabel('Time')
     plt.ylabel('Signal')
     plt.title(title)
@@ -221,6 +228,10 @@ def plot_emd_spectrum(emd_sp, cutoff_period, conf_period=None, conf_up=None,
             plt.plot(conf_period, conf_up, color='red', label=label)
 
             # get upper boundaries for the periods of the EMD modes found
+            
+            if (emd_sp['period'][0] < conf_period[0]):
+                conf_period[0] = emd_sp['period'][0] 
+            
             f = interp1d(conf_period, conf_up)
             upper_bounds = f(emd_sp['period'])
             mask = emd_sp['energy'] > upper_bounds
