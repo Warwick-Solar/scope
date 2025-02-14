@@ -5,6 +5,7 @@ from .emd_period_energy import emd_period_energy
 import matplotlib.pyplot as plt
 from scipy.stats import chi2
 from scipy.optimize import curve_fit
+from tqdm import tqdm
 
 '''
 This script runs as follows:
@@ -161,7 +162,8 @@ def emd_noise_fit(period, energy, mode_n):
     mean_period = np.zeros(max_modes-1) #exclude 1st mode
     mean_energy = np.zeros(max_modes-1) #exclude 1st mode
     dof = np.zeros(max_modes-1)
-    for i in range (2, max_modes+1): #exclude 1st mode
+
+    for i in range(2, max_modes+1): #exclude 1st mode
         #Extract energy and period of specific mode
         ind = np.where(mode_n == i)[0]
         period_ind = period[ind]
@@ -173,20 +175,14 @@ def emd_noise_fit(period, energy, mode_n):
         hist, bin_edges = np.histogram(energy_ind, bins='auto')
         bin_centres = (bin_edges[1:] + bin_edges[:-1])/2
         bin_width = bin_edges[1] - bin_edges[0]
-        # plt.hist(energy_ind, bins='auto')
-        # plt.show()
-        
+
         #Normalise the area of histogram to unity
         hist = hist / (np.sum(hist) * bin_width) 
-        # plt.scatter(bin_centres, hist)
     
         p0 = [bin_centres[np.argmax(hist)], 1.0] #initial guess
+
         params, _ = curve_fit(chisqr_pdf, bin_centres, hist, p0=p0) 
-        # x_tmp = np.linspace(0, 1, 1000)
-        # plt.plot(x_tmp, chisqr_pdf(x_tmp, params[0], params[1]))
-        # plt.grid()
-        # plt.show()
-    
+
         mean_energy[i-2] = params[0] #mean modal energy
         dof[i-2] = params[1] #degrees of freedom of chi-square distribution
         
@@ -235,18 +231,6 @@ def emd_noise_conf(t, alpha, period_min, period_max, num_samples=500, signal_ene
             Mean energy of the modal energy in each bin
     '''
         
-    # # Test parameters
-    # alpha = 1.1923
-    # signal_energy = 1.4405183028037172
-    # num_samples = 500
-    # L = 30 
-    # N = 300
-    # dt = L/N
-    # t = dt * np.arange(N)
-    # fap = 0.01
-    # period_min = 2*dt
-    # period_max = N*dt
-    
     
     N = len(t) #length of time series
     dt = t[1] - t[0]
@@ -256,8 +240,10 @@ def emd_noise_conf(t, alpha, period_min, period_max, num_samples=500, signal_ene
     mode_n = np.array([]) #mode number of IMFs
     
     config = emd.sift.get_config('sift')
-    config['imf_opts/sd_thresh'] = 1e-4
-    for i in range (num_samples):
+    config['imf_opts/sd_thresh'] = 0.001
+    
+    print(fr'Generating and EMD processing {num_samples} noise samples with alpha={round(alpha,2)}')
+    for i in tqdm(range(num_samples)):
         x = cn.powerlaw_psd_gaussian(alpha, N) #generate noise signal
         x -= np.mean(x) #normalise mean to zero
         x /= np.std(x) #normalise std to unity
@@ -274,8 +260,21 @@ def emd_noise_conf(t, alpha, period_min, period_max, num_samples=500, signal_ene
             period = np.append(period, emd_period_energy_result['dominant_period'])
             energy = np.append(energy, emd_period_energy_result['energy'])
             mode_n = np.append(mode_n, j+1)
-            
     
+    # check if the number of each specific EMD mode is less than 5 
+    # to assure the emd_noise_fit stability
+    prohibited_modes = []
+    max_modes = int(np.max(mode_n)) #maximum mode number
+    for i in range (2, max_modes+1): #exclude 1st mode
+        ind = np.where(mode_n == i)[0]
+        mode_ind_count = len(energy[ind])
+        if (mode_ind_count < 5):
+            prohibited_modes.append(i)
+  
+    period = period[np.logical_not(np.isin(mode_n, prohibited_modes))]
+    energy = energy[np.logical_not(np.isin(mode_n, prohibited_modes))]
+    mode_n = mode_n[np.logical_not(np.isin(mode_n, prohibited_modes))]
+            
     mean_energy, dof, mean_period = emd_noise_fit(period, energy, mode_n)
     mean_period_pt, mean_energy_pt = mean_period_energy(period, energy, mode_n, N, dt)
     
@@ -284,9 +283,6 @@ def emd_noise_conf(t, alpha, period_min, period_max, num_samples=500, signal_ene
     #Cutoff modes with less than 2.5 oscillations (not suitable for accurate period estimations)
     ind = np.where(mean_period < 0.4*length_mode)[0] 
     ind = ind[1:] #exclude 1st mode
-    
-    # plt.scatter(mean_period[ind], dof[ind])
-    # plt.scatter(mean_period[ind], mean_energy[ind])
     
     #Fit mean modal energy and dof vs mean modal period 
     period, dof = make_lin_dep_loglog(mean_period[ind], dof[ind], period_min, period_max, n_conf) 
