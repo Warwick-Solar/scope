@@ -1,3 +1,8 @@
+###############################################################################
+# This file is a hands-on example of the processing of a noisy synthetic time 
+# series using scope
+###############################################################################
+
 import numpy as np
 import colorednoise as cn
 import matplotlib.pyplot as plt

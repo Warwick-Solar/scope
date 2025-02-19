@@ -1,3 +1,8 @@
+###############################################################################
+# This example illustrates the period-energy relation for different types of 
+# noise
+###############################################################################
+
 import numpy as np
 import matplotlib.pyplot as plt
 import emd
