@@ -1,10 +1,10 @@
-# SCOPE
-![](./docs/source/_static/scope_logo.jpg)
+# `scope`
+<img src="./docs/source/_static/scope_logo.jpg" alt="Scope Logo" width="300">
 
-SCOPE - Statistical Confidence of Oscillatory Processes with EMD (Empirical Mode Decomposition).
+`scope` - Statistical Confidence of Oscillatory Processes with EMD (Empirical Mode Decomposition).
 
 ## Project description
-SCOPE is the project to detect quasi-periodicities in the solar atmosphere using the EMD technique. These oscillatory signals are typically accompanied by a combination of white noise and coloured noise with power law spectral dependence. To detect quasi-periodicities, we compute the EMD spectrum containing EMD-revealed modes and the confidence limits of modal energy. This allows us to identify the significant mode beyond the confidence limits, which is expected to be associated with the quasi-periodic oscillatory signal of interest.
+`scope` is the project to detect quasi-periodicities in the solar atmosphere using the EMD technique. These oscillatory signals are typically accompanied by a combination of white noise and coloured noise with power law spectral dependence. To detect quasi-periodicities, we compute the EMD spectrum containing EMD-revealed modes and the confidence limits of modal energy. This allows us to identify the significant mode beyond the confidence limits, which is expected to be associated with the quasi-periodic oscillatory signal of interest.
 
 The project consists of three main parts:
 - Estimation of power law index and noise energy using a debiased least squares fit of Fourier spectrum based on the method given by [Vaughan (2005)](https://doi.org/10.1051/0004-6361:20041453). (fit_fourier.py)
