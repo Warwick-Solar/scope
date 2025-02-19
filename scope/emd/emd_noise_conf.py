@@ -229,6 +229,12 @@ def emd_noise_conf(t, alpha, period_min, period_max, num_samples=500, signal_ene
             Mean period of the modal period in each bin
         mean_energy_pt : numpy array
             Mean energy of the modal energy in each bin
+        period_all : numpy array
+                Periods of all modes found by EMD in generated noise samples
+        energy_all : numpy array
+            Energies of all modes found by EMD in generated noise samples
+        mode_n_all : numpy array
+            Mode numbers of all modes found by EMD in generated noise samples
     '''
         
     
@@ -285,7 +291,7 @@ def emd_noise_conf(t, alpha, period_min, period_max, num_samples=500, signal_ene
     ind = ind[1:] #exclude 1st mode
     
     #Fit mean modal energy and dof vs mean modal period 
-    period, dof = make_lin_dep_loglog(mean_period[ind], dof[ind], period_min, period_max, n_conf) 
+    period_fit, dof = make_lin_dep_loglog(mean_period[ind], dof[ind], period_min, period_max, n_conf) 
     _, mean_energy = make_lin_dep_loglog(mean_period[ind], mean_energy[ind], period_min, period_max, n_conf)
     
     up = np.zeros(n_conf) #upper confidence limits
@@ -300,9 +306,12 @@ def emd_noise_conf(t, alpha, period_min, period_max, num_samples=500, signal_ene
         'down': down,
         'dof': dof,
         'mean_energy': mean_energy,
-        'period': period,
+        'period': period_fit,
         'mean_period_pt': mean_period_pt,
         'mean_energy_pt': mean_energy_pt,
+        'period_all': period,
+        'energy_all': energy,
+        'mode_n_all': mode_n
         }
         
     return emd_noise_conf_result
