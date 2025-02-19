@@ -1,4 +1,6 @@
 # SCOPE
+![](./docs/source/_static/scope_logo.jpg)
+
 SCOPE - Statistical Confidence of Oscillatory Processes with EMD (Empirical Mode Decomposition).
 
 ## Project description
