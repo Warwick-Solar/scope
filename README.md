@@ -11,7 +11,7 @@ The project consists of the following main parts:
 - Estimation of the power-law index and energy of superimposed background noise from the Fourier power spectrum as described in [Vaughan (2005)](https://doi.org/10.1051/0004-6361:20041453). See function `fit_fourier` from `fourier` module in `scope`.
 - Estimation of the dominant period of each EMD-revealed intrinsic mode from the global wavelet spectrum produced with [Torrence & Compo Wavelet Analysis Software](https://github.com/ct6502/wavelets) ([Torrence & Compo 1998](https://psl.noaa.gov/people/gilbert.p.compo/Torrence_compo1998.pdf)) package. See function `emd_period_energy` from `emd` module in `scope`.
 - Calculate EMD confidence limits using the method proposed by [Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306). See function `emd_noise_conf` from `emd` module in `scope`.
-- Visualise the results with `plot_signal`, `plot_modes`, `plot_fft_spectrum`, and `plot_emd_spectrum` from `utils` module.
+- Visualise the results with `plot_signal`, `plot_modes`, `plot_fft_spectrum`, and `plot_emd_spectrum` functions from `utils` module.
 
 
 ## Table of Contents
