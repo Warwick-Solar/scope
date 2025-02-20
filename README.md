@@ -1,5 +1,5 @@
 # `scope`
-<img src="./docs/source/_static/scope_logo.jpg" alt="Scope Logo" width="300">
+<img src="./docs/source/_static/scope_logo.png" alt="Scope Logo" width="300">
 
 `scope` - Statistical Confidence of Oscillatory Processes with EMD (Empirical Mode Decomposition).
 
