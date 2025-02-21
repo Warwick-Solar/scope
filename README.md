@@ -22,7 +22,7 @@ The project consists of the following main parts:
 - [License](#license)
 
 ## Prerequisites
-- Leave blank
+Python &ge; 3.8
 
 ## Installation
  - Leave blank
