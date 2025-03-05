@@ -31,18 +31,18 @@ Python &ge; 3.8
 <details>
  <summary>Click to expand</summary>
  
-The sample signal in this example consists of an oscillatory component, a decaying trend and some random noise signals obeying power law: \
+The sample signal in this example consists of an oscillatory component, an exponentially decaying trend and a combination of white and coloured noise obeying the power law: \
 ![](./docs/source/_static/input_signal.png)
 
-After setting the mean of the signal to zero, we apply EMD to obtain the first set of intrinsic mode functions (IMFs):
+After setting the mean of the input signal to zero, we apply EMD to obtain the set of intrinsic mode functions (IMFs):
 ```python
 modes = emd_modes(x, sd_thresh=1e-4)
 plot_modes(t, modes)
 ```
-where the 'sd_thresh' parameter is the threshold at which the sift of each IMF will stop. 
+where the 'sd_thresh' parameter is the threshold at which the sift of each IMF stops. 
 ![](./docs/source/_static/1st_EMD.png)
 
-The trend of the signal is estimated using the 'emd_trend' function. This function identifies modes with periods exceeding a fraction of the total signal duration (denoted by the 'cutoff' parameter) and the residual as the trend of the signal. This cutoff is 0.4*signal length by default, which means that mode with less than 2.5 oscillations is considered as part of the trend. 
+The empirical trend of the signal is estimated using the `emd_trend` function. This function identifies modes with periods exceeding a fraction of the total signal duration (denoted by the 'cutoff' parameter) and the residual as the trend of the signal. This cutoff is set to 0.4 of the total signal length by default, which means that a mode with less than 2.5 oscillation cycles is considered as part of the empirical trend. 
 ```python
 modes = emd_trend(modes, t)
 trend_emd = modes[:, -1]
