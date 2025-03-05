@@ -30,7 +30,9 @@ Python &ge; 3.8
 ## Example
 <details>
  <summary>Click to expand</summary>
- 
+
+The example described below is provided in the `emd_example.py` file.
+
 The sample signal in this example consists of an oscillatory component, an exponentially decaying trend and a combination of white and coloured noise obeying the power law: \
 ![](./docs/source/_static/input_signal.png)
 
@@ -39,7 +41,7 @@ After setting the mean of the input signal to zero, we apply EMD to obtain the s
 modes = emd_modes(x, sd_thresh=1e-4)
 plot_modes(t, modes)
 ```
-where the 'sd_thresh' parameter is the threshold at which the sift of each IMF stops. 
+where the 'sd_thresh' parameter is the threshold at which the sift of each IMF stops. In our example, we obtained seven EMD modes, six of which are oscillatory IMFs and one is a non-oscillatory residual (usually, the number of EMD modes is about $$\log_2(N)$$ where $$N$$ is the number of data points in the input signal).
 ![](./docs/source/_static/1st_EMD.png)
 
 The empirical trend of the signal is estimated using the `emd_trend` function. This function identifies modes with periods exceeding a fraction of the total signal duration (denoted by the 'cutoff' parameter) and the residual as the trend of the signal. This cutoff is set to 0.4 of the total signal length by default, which means that a mode with less than 2.5 oscillation cycles is considered as part of the empirical trend. 
@@ -48,30 +50,30 @@ modes = emd_trend(modes, t)
 trend_emd = modes[:, -1]
 plot_signal(t, trend_emd, 'Trend of the signal')
 ```
-For this simple example, the trend of the signal is simply the residual of EMD: \
+For our example, the empirical trend of the signal is found to form by the last EMD mode (the residual): \
 ![](./docs/source/_static/trend_signal.png)
 
-Hence the detrended signal is: \
+Hence, the detrended signal is: \
 ![](./docs/source/_static/detrended_signal.png)
 
-Now we can estimate the noise parameters of the actual part of the signal we are interested in, the detrended signal, by the 'fit_fourier' function. The function returns the noise parameters of coloured noise and white noise (if present). For this example, the FFT spectrum of the detrended signal shows a combination of white and coloured noise, with the power law index of this coloured noise being 1.61±0.49. The peak outside the 95% confidence level (false alarm probability = 0.05) is expected to be the period of the oscillatory signal.
+Now we can estimate the parameters of superimposed noise by applying the `fit_fourier` function to the detrended signal. The function returns the FFT spectrum of the detrended signal best-fitted by a power-law model, with powers of white (if present) and coloured noise and the power-law index of coloured noise as model parameters. For our example, the FFT spectrum shows a combination of white and coloured noise components in the detrended signal, with the power-law index of coloured noise being 1.1±0.3 and the ratio of the white to coloured noise energies about 0.3. The `fit_fourier` function also estimates the confidence interval of a given value (e.g. 95%, false alarm probability = 0.05). The Fourier peaks outside this confidence interval are attributed to statistically significant oscillatory processes of non-noise origin.
 ```python
 fit_fft = fit_fourier(x, dt, fap=0.05)
 plot_fft_spectrum(fit_fft)
 ```
 ![](./docs/source/_static/FFT_spectrum.png)
 
-The EMD energy spectrum is computed by the 'emd_energy_spectrum' function:
+The EMD energy spectrum, i.e. the relationship between the EMD modal energy vs. dominant oscillation period for the set of EMD modes identified in the original signal, is computed by the `emd_energy_spectrum` function:
 ```python
-emd_sp = emd_energy_spectrum(modes, t, plot_fitting=True)
+emd_sp = emd_energy_spectrum(modes, t)
 cutoff_period = 0.4 * len(x) * dt #show cutoff period
 plot_emd_spectrum(emd_sp, cutoff_period)
 ```
 ![](./docs/source/_static/emd_spectrum.png) 
 
-The dashed line corresponds to the cutoff period adopted in 'emd_trend' function, all modes beyond this line are considered as components of trend.
+The vertical dashed line corresponds to the cutoff period adopted in the `emd_trend` function; all modes beyond this line are considered as components of trend.
 
-With the power law index and noise energy returned by 'fit_fourier' function, we can compute the confidence limits of the EMD energy spectrum using 'emd_noise_conf' function:
+With the power-law index and noise energy returned by the `fit_fourier` function, we can compute the confidence limits of the EMD energy spectrum using the `emd_noise_conf` function (separately for coloured noise and, if present, white noise):
 ```python
 # false alarm probability
 fap = 0.05
@@ -85,10 +87,24 @@ if fit_fft['white_energy'] > 0: # check if there is only colored noise model
                             period_max=N*dt, num_samples = 500, 
                             signal_energy=fit_fft['white_energy'], fap=fap)
 ```
-Here the false alarm probability (fap) is set to 0.05. The 'emd_noise_conf' function generates 500 noise samples with the same power law index ('alpha') and energy ('signal_energy') as the input. The other two parameters 'period_min' and 'period_max' set the range of period over which the confidence limits will be computed. The EMD energy spectrum with confidence limits is given by: \
+Here, the false alarm probability (fap) is set to 0.05 (95% confidence). The `emd_noise_conf` function generates 500 independent noise samples with the same power law index ('alpha') and energy ('signal_energy') as the input. The other two parameters, 'period_min' and 'period_max', set the range of periods over which the confidence limits are computed. Combining the upper and lower confidence limits for white and coloured noise compenents,
+```python
+#Upper confidence limit for the combined noises
+conf_up = conf_c['up'] + conf_w['up']
+
+#Lower confidence limit for the combined noises
+conf_down = conf_c['down'] + conf_w['down']
+```
+and visualising the EMD energy spectrum with confidence,
+```python
+# plot emd spectrum
+plot_emd_spectrum(emd_sp, cutoff_period, conf_period, conf_up, conf_down, conf_mean, fap)
+```
+it becomes\
 ![](./docs/source/_static/emd_spectrum_with_conf.png) 
 
-The modes beyond the upper confidence limit are considered as significant modes that may not be considered as random noise.
+Here, 'conf_mean' stands for the expected mean value of noise energy (`conf_mean = conf_c['mean_energy'] + conf_w['mean_energy']`) and 'conf_period' (`conf_period = conf_c['period']`) is the array of oscillation periods over which the confidence limits are computed.
+The EMD modes beyond the confidence limits are considered as significant, that are not likely to be caused by random noise. In our example, only one mode is found to be significant which seem consistent with the input oscillatory component of the original signal.
 </details>
 
 ## Description of Functions 
