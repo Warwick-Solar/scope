@@ -1,6 +1,15 @@
 # `scope`
 <img src="./docs/source/_static/scope_logo.png" alt="Scope Logo" width="300">
 
+<p align="left">
+  <a href="https://pypi.org/project/scope-emd/" style="text-decoration: none; border: none;">
+    <img src="https://img.shields.io/pypi/v/scope-emd" alt="PyPI version" style="vertical-align: middle;">
+  </a>
+  <a href="https://statistical-confidence-of-oscillatory-processes-with-emd.readthedocs.io/en/latest/" style="text-decoration: none; border: none;">
+    <img src="https://readthedocs.org/projects/statistical-confidence-of-oscillatory-processes-with-emd/badge/?version=latest" alt="Docs" style="vertical-align: middle;">
+  </a>
+</p>
+
 `scope` - Statistical Confidence of Oscillatory Processes with EMD (Empirical Mode Decomposition).
 
 ## Project description
