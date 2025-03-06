@@ -106,6 +106,9 @@ it becomes\
 
 Here, 'conf_mean' stands for the expected mean value of noise energy (`conf_mean = conf_c['mean_energy'] + conf_w['mean_energy']`) and 'conf_period' (`conf_period = conf_c['period']`) is the array of oscillation periods over which the confidence limits are computed.
 The EMD modes beyond the confidence limits are considered as significant, that are not likely to be caused by random noise. In our example, only one mode is found to be significant which seem consistent with the input oscillatory component of the original signal.
+
+![](./docs/source/_static/significant_mode.png) 
+
 </details>
 
 ## Functions 
