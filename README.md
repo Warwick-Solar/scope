@@ -114,17 +114,21 @@ The EMD modes beyond the confidence limits are considered as significant, that a
  <summary>Click to expand</summary>
  
 ### 'emd_period_energy'
-As mentioned in the examples section, the 'emd_trend' function selects trends using modal period. The (dominant) period of a mode is estimated by fitting the global wavelet spectrum of the mode with a Gaussian + Parabolic function, conducted in the 'emd_period_energy' function. An example of the global wavelet spectrum fit is shown below: \
+As mentioned in the example section, the total energy and (dominant) period of each EMD mode are required for constructing an EMD energy spectrum. The total modal energy is estimated by summing up squares of instantaneous amplitudes of each EMD mode. The dominant period of each EMD mode is estimated by best-fitting the global wavelet spectrum ([Torrence & Compo 1998](https://psl.noaa.gov/people/gilbert.p.compo/Torrence_compo1998.pdf)) of the mode with a Gaussian + Parabolic function, performed in the `emd_period_energy` function. The position and standard deviation of the Gaussian peak are used for the dominant EMD modal period and the uncertainty of this estimation.
+<!--
+An example of the global wavelet spectrum fit is shown below: \
 ![](./docs/source/_static/fit_mode.png)
-We can see that for each mode there is a Gaussian-like peak associated with the dominant period. The position and standard deviation of the Gaussian peak refers to the dominant period and the uncertainty of this estimation.
+We can see that for each mode there is a Gaussian-like peak associated with the dominant period.
+--> 
 
 ### 'fit_fourier'
-In the 'fit_fourier' function, we fit the FFT spectrum by a power law model in log-log scale to extract the power law index and noise energy of the signal. Firstly, we must note that each point of the Fourier power $I(f_{j})$ follows a chi-square distribution with 2 degrees of freedom, denoted as:
-```math
-I(f_{j}) = \mathcal{P}(f_{j}) \chi_{2}^{2}/2
-```
-where $\mathcal{P}(f_{j})$ is the true power spectrum, and $\chi_{2}^{2}$ is a random variable distributed as $\chi^{2}$ with 2 degrees of freedom. Since the least squares method assumes that each point is Gaussian-distributed, we cannot directly apply this method in the FFT spectrum fitting. Instead, we should consider the mean of the $\chi_{2}^{2}/2$ term. In log scale, $\left\langle \mathrm{log}(\chi^{2}_{2}/2) \right\rangle$ = -0.25068. This term corresponds to the bias that will be introduced to the fitting if we directly implement the least squares method. Hence, we shall include this term in the model function such that the least squares fitting will not be 'biased'.
+In the `fit_fourier` function, we fit the FFT spectrum by a power-law model in log-log scale to extract the power-law index and energy of the noise component of the signal. Firstly, we must note that, at each Fourier frequency, the Fourier power $$I(f_{j})$$ follows a chi-squared distribution with 2 degrees of freedom, denoted as:
 
+$$I(f_{j}) = \mathcal{P}(f_{j}) \chi_{2}^{2}/2$$
+
+where $\mathcal{P}(f_{j})$ is the true power spectrum, and $\chi_{2}^{2}$ is a random variable distributed as $\chi^{2}$ with 2 degrees of freedom. Since the least squares method assumes that the input data set is Gaussian-distributed, we cannot directly apply this method to best-fit the FFT power spectrum. Instead, we should consider the mean of the $$\chi_{2}^{2}/2$$ term. In log scale, $$\left\langle \mathrm{log}(\chi^{2}_{2}/2) \right\rangle$$ = -0.25068 ([Vaughan (2005)](https://doi.org/10.1051/0004-6361:20041453)). This term corresponds to the bias that will be introduced to the fitting if one directly implements the least squares method. Hence, we shall include this term in the model function such that the least squares fitting will not be 'biased'. We also note that the value of this bias term is independent of the choice of normalisation of the FFT power spectrum.
+
+<!--
 Additionally, we can visualise this bias factor. Since the Fourier power follows a chi-square distribution with 2 DoF is essentially an exponential function, we consider the integration of an exponential function over the entire range of power, which gives a constant value:
 ```math
 \int_{0}^{P_{\mathrm{max}}} e^{-x} dx = const.
@@ -135,6 +139,7 @@ One can transform it to log scale by considering a new variable $τ = lnx$. Henc
 ```
 where $F(\tau) = e^{-e^{\tau}} e^{\tau}$ is the distribution of the Fourier power in log scale. By plotting this function we see an asymmetric distribution with its mean positioned at -0.25068.
 ![](./docs/source/_static/bias_visualisation.png)
+--> 
 
 The power law model is a superposition of white and coloured noises, given by:
 ```math
