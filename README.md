@@ -18,7 +18,8 @@ The project consists of the following main parts:
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Example](#example)
-- [Contributing](#contributing)
+- [Description of Functions](#functions)
+- [Acknowledgements](#acknowledgements)
 - [License](#license)
 
 ## Prerequisites
@@ -107,7 +108,7 @@ Here, 'conf_mean' stands for the expected mean value of noise energy (`conf_mean
 The EMD modes beyond the confidence limits are considered as significant, that are not likely to be caused by random noise. In our example, only one mode is found to be significant which seem consistent with the input oscillatory component of the original signal.
 </details>
 
-## Description of Functions 
+## Functions 
 
 <details>
  <summary>Click to expand</summary>
@@ -155,9 +156,6 @@ E_{m}P_{m} = \text{const.}
 [Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306) suggests that the modal energy of the mth IMF should have a chi-square distribution with the $k$ degrees of freedom (DoF). We thus estimate the confidence limits using the percent-point function of the chi-square distribution. Here we use the false alarm probability = 0.05. The 'emd_noise_conf' function generates 500 (by default) noise samples with the same power law index and energy as the input and conducts the EMD. It extracts the dominant period and modal energy for each IMF by calling the 'emd_period_energy' function. The 'emd_noise_fit' function fits the chi-square distribution to the histogram of modal energy for each mode number to extract the mean energy and $k$. We obtain the mean period, mean energy and number of DoF for each mode number. Due to the dyadic property of EMD, we expect both mean energy vs mean period and $k$ vs mean period are linear in log-log scale. The exact linear relationship is found by fitting a straight line. By obtaining this linear relationship, we use it to generate 500 data points of the confidence limits over the whole range of period.
 
 </details>
-
-## Contributing
-Leave blank
 
 ## Acknowledgements
 Leave blank
