@@ -105,7 +105,7 @@ it becomes\
 ![](./docs/source/_static/emd_spectrum_with_conf.png) 
 
 Here, 'conf_mean' stands for the expected mean value of noise energy (`conf_mean = conf_c['mean_energy'] + conf_w['mean_energy']`) and 'conf_period' (`conf_period = conf_c['period']`) is the array of oscillation periods over which the confidence limits are computed.
-The EMD modes beyond the confidence limits are considered as significant, that are not likely to be caused by random noise. In our example, only one mode is found to be significant which seem consistent with the input oscillatory component of the original signal.
+The EMD modes beyond the confidence limits are considered as significant, that are not likely to be caused by random noise. In our example, only one mode is found to be significant which seems consistent with the input oscillatory component of the original signal.
 
 ![](./docs/source/_static/significant_mode.png) 
 
@@ -140,19 +140,21 @@ One can transform it to log scale by considering a new variable $τ = lnx$. Henc
 ```math
 \int_{-\infty}^{\mathrm{ln} P_{\mathrm{max}}} e^{-e^{\tau}} e^{\tau} d\tau = const.
 ```
-where $F(\tau) = e^{-e^{\tau}} e^{\tau}$ is the distribution of the Fourier power in log scale. By plotting this function we see an asymmetric distribution with its mean positioned at -0.25068.
+where $F(\tau) = e^{-e^{\tau}} e^{\tau}$ is the distribution of the Fourier power in log scale. By plotting this function, we see an asymmetric distribution with its mean positioned at -0.25068.
 ![](./docs/source/_static/bias_visualisation.png)
 --> 
 
-The power law model we used in the `fit_fourier` function is a superposition of white and coloured noises, given by:
-```math
- \mathcal{P}(f) = \mathcal{P}_{c}(f) + \mathcal{P}_{w}(f) = N_{c} f^{-\alpha_{c}} + N_{w}
-```
-where $N_{c}$ and $N_{w}$ are the proportionality constants of coloured and white noises respectively, and $\alpha_{c}$ is the power law index of coloured noise. After obtaining the proportionality constants from the debiased least squares fit, we can estimate the energy of each noise type using:
-```math
-\text{Energy} = N \cdot nf \cdot N_{c/w} 
-```
-where $N$ is the number of data points in time series and $nf$ is the number of Fourier frequencies, which does not include 0 Hz and Nyquist frequency.
+The power law model we used in the `fit_fourier` function is a superposition of white and coloured noise components, given by:
+
+$$ \mathcal{P}(f) = \mathcal{P}_{c}(f) + \mathcal{P}_{w}(f) = Z_{c} f^{-\alpha_{c}} + Z_{w},$$
+
+where $Z_{c}$ and $Z_{w}$ are the proportionality constants of coloured and white noises, respectively, and $\alpha$ is the power law index of coloured noise. After obtaining the proportionality constants from the debiased least squares fit, we can estimate the energy of each noise type using:
+
+$$\text{Energy} = N \cdot nf \cdot Z_{c/w},$$
+
+where $N$ is the number of data points in the time series and $nf$ is the number of Fourier frequencies, which does not include 0 Hz and the Nyquist frequency. And estimate the confidence limit for a given false alarm probability (fap) as:
+
+$$ .. $$
 
 ### 'emd_noise_conf'
 [Flandrin et al. (2004)](https://ieeexplore.ieee.org/document/1261951) and [Wu and Huang (2004)](https://royalsocietypublishing.org/doi/10.1098/rspa.2003.1221) investigate the dyadic property of EMD and suggest the following relation between modal energy and modal period:
