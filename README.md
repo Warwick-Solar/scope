@@ -45,13 +45,13 @@ plot_modes(t, modes)
 where the 'sd_thresh' parameter is the threshold at which the sift of each IMF stops. In our example, we obtained seven EMD modes, six of which are oscillatory IMFs and one is a non-oscillatory residual (usually, the number of EMD modes is about $$\log_2(N)$$ where $$N$$ is the number of data points in the input signal).
 ![](./docs/source/_static/1st_EMD.png)
 
-The empirical trend of the signal is estimated using the `emd_trend` function. This function identifies modes with periods exceeding a fraction of the total signal duration (denoted by the 'cutoff' parameter) and the residual as the trend of the signal. This cutoff is set to 0.4 of the total signal length by default, which means that a mode with less than 2.5 oscillation cycles is considered as part of the empirical trend. 
+The empirical trend of the signal is estimated using the `emd_trend` function. This function identifies modes with periods exceeding a fraction of the total signal duration (denoted by the 'cutoff' parameter) and the residual, combines them into an empirical trend of the input signal, and returns a new set of modes in which all modes have periods shorter than the cutoff and the last mode represents the signal's trend. This cutoff is set to 0.4 of the total signal length by default, which means that a mode with less than 2.5 oscillation cycles is considered as part of the empirical trend. 
 ```python
 modes = emd_trend(modes, t)
 trend_emd = modes[:, -1]
 plot_signal(t, trend_emd, 'Trend of the signal')
 ```
-For our example, the empirical trend of the signal is found to form by the last EMD mode (the residual): \
+For our example, the empirical trend of the signal is found to form by the last EMD mode (the residual) only: \
 ![](./docs/source/_static/trend_signal.png)
 
 Hence, the detrended signal is: \
