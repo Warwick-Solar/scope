@@ -150,7 +150,7 @@ $$ \mathcal{P}(f) = \mathcal{P}_{c}(f) + \mathcal{P}_{w}(f) = Z_{c} f^{-\alpha_{
 
 where $Z_{c}$ and $Z_{w}$ are the proportionality constants of coloured and white noises, respectively, and $\alpha$ is the power law index of coloured noise. After obtaining the proportionality constants from the debiased least squares fit, we can estimate the energy of each noise type, $E_{c/w}$ using:
 
-$$E_{c/w} = N \cdot nf \cdot Z_{c/w},$$
+$$E_{c/w} = N \times nf \times Z_{c/w},$$
 
 where $N$ is the number of data points in the time series and $nf$ is the number of Fourier frequencies, which does not include 0 Hz and the Nyquist frequency. And estimate the confidence limit for a given false alarm probability (fap) as $-\ln\left(1-(1-\mathrm{fap})^{1/nf}\right)\times\mathcal{P}(f)$.
 
