@@ -144,7 +144,7 @@ where $F(\tau) = e^{-e^{\tau}} e^{\tau}$ is the distribution of the Fourier powe
 ![](./docs/source/_static/bias_visualisation.png)
 --> 
 
-The power law model is a superposition of white and coloured noises, given by:
+The power law model we used in the `fit_fourier` function is a superposition of white and coloured noises, given by:
 ```math
  \mathcal{P}(f) = \mathcal{P}_{c}(f) + \mathcal{P}_{w}(f) = N_{c} f^{-\alpha_{c}} + N_{w}
 ```
