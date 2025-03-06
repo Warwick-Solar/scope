@@ -15,7 +15,7 @@ use_example_data = True # set to False for a new generated time series
 
 if use_example_data:
     #Load example data file
-    t, trend, signal, x = np.loadtxt('example_data.txt')
+    t, trend, signal, x = np.loadtxt('examples/example_data.txt')
 else:
     #Generate time series
     L = 30 #length of time series
@@ -120,3 +120,10 @@ conf_mean = conf_c['mean_energy'] + conf_w['mean_energy']
 # plot emd spectrum
 plot_emd_spectrum(emd_sp, cutoff_period, conf_period, conf_up, conf_down, conf_mean, fap)
 
+#%%############################################################################
+# Plot a significant EMD mode together with the initial signal
+fig, ax = plt.subplots(1)
+ax.plot(t, modes[:,-3], alpha=0.8, label='EMD mode')
+ax.plot(t, signal, alpha=0.8, label='Initial signal')
+plt.ylim(-0.2,0.2)
+ax.legend()
