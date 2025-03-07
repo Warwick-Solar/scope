@@ -166,7 +166,7 @@ where $Z_{c}$ and $Z_{w}$ are the proportionality constants of coloured and whit
 
 $$E_{c/w} = N \times nf \times Z_{c/w},$$
 
-where $N$ is the number of data points in the time series and $nf$ is the number of Fourier frequencies, which does not include 0 Hz and the Nyquist frequency. And estimate the confidence limit for a given false alarm probability (fap) as $-\ln\left(1-(1-\mathrm{fap})^{1/nf}\right)\times\mathcal{P}(f)$.
+where $N$ is the number of data points in the time series and $nf$ is the number of Fourier frequencies, which does not include 0 Hz and the Nyquist frequency. And estimate the confidence limit for a given false alarm probability (fap) as $-\ln\left(1-(1-\mathrm{fap})^{1/nf}\right)\times{P}(f)$.
 
 See [`fft_fit_example.py`](https://github.com/Warwick-Solar/scope/blob/main/examples/fft_fit_example.py) for an example use of the `fit_fourier` function.
 
