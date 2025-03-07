@@ -35,7 +35,12 @@ The project consists of the following main parts:
 Python &ge; 3.8
 
 ## Installation
- - Leave blank
+
+To install the package, ensure you have Python installed on your system. You can then install the package using `pip`:
+
+```bash
+pip install scope-emd
+```
 
 ## Example
 <details>
