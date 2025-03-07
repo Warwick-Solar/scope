@@ -105,12 +105,12 @@ conf_up = conf_c['up'] + conf_w['up']
 #Lower confidence limit for the combined noises
 conf_down = conf_c['down'] + conf_w['down']
 ```
-and visualising the EMD energy spectrum with confidence,
+and visualising the EMD energy spectrum with confidence limits,
 ```python
 # plot emd spectrum
 plot_emd_spectrum(emd_sp, cutoff_period, conf_period, conf_up, conf_down, conf_mean, fap)
 ```
-it becomes\
+we obtain\
 ![](./docs/source/_static/emd_spectrum_with_conf.png) 
 
 Here, 'conf_mean' stands for the expected mean value of noise energy (`conf_mean = conf_c['mean_energy'] + conf_w['mean_energy']`) and 'conf_period' (`conf_period = conf_c['period']`) is the array of oscillation periods over which the confidence limits are computed.
