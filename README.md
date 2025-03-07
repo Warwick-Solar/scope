@@ -35,13 +35,18 @@ The project consists of the following main parts:
 Python &ge; 3.8
 
 ## Installation
- - Leave blank
+
+To install the package, ensure you have Python installed on your system. You can then install the package using `pip`:
+
+```bash
+pip install scope-emd
+```
 
 ## Example
 <details>
  <summary>Click to expand</summary>
 
-The example described below is provided [`emd_example.py`](https://github.com/Warwick-Solar/scope/blob/main/examples/emd_example.py).
+The example described below is provided in [`emd_example.py`](https://github.com/Warwick-Solar/scope/blob/main/examples/emd_example.py).
 
 The sample signal in this example consists of an oscillatory component, an exponentially decaying trend and a combination of white and coloured noise obeying the power law: \
 ![](./docs/source/_static/input_signal.png)
@@ -105,12 +110,12 @@ conf_up = conf_c['up'] + conf_w['up']
 #Lower confidence limit for the combined noises
 conf_down = conf_c['down'] + conf_w['down']
 ```
-and visualising the EMD energy spectrum with confidence,
+and visualising the EMD energy spectrum with confidence limits,
 ```python
 # plot emd spectrum
 plot_emd_spectrum(emd_sp, cutoff_period, conf_period, conf_up, conf_down, conf_mean, fap)
 ```
-it becomes\
+we obtain\
 ![](./docs/source/_static/emd_spectrum_with_conf.png) 
 
 Here, 'conf_mean' stands for the expected mean value of noise energy (`conf_mean = conf_c['mean_energy'] + conf_w['mean_energy']`) and 'conf_period' (`conf_period = conf_c['period']`) is the array of oscillation periods over which the confidence limits are computed.
@@ -136,9 +141,9 @@ We can see that for each mode there is a Gaussian-like peak associated with the 
 ### 'fit_fourier'
 In the `fit_fourier` function, we fit the FFT spectrum by a power-law model in log-log scale to extract the power-law index and energy of the noise component of the signal. Firstly, we must note that, at each Fourier frequency, the Fourier power $$I(f_{j})$$ follows a chi-squared distribution with 2 degrees of freedom, denoted as:
 
-$$I(f_{j}) = \mathcal{P}(f_{j}) \chi_{2}^{2}/2$$
+$$I(f_{j}) = P(f_{j}) \chi_{2}^{2}/2$$
 
-where $\mathcal{P}(f_{j})$ is the true power spectrum, and $\chi_{2}^{2}$ is a random variable distributed as $\chi^{2}$ with 2 degrees of freedom. Since the least squares method assumes that the input data set is Gaussian-distributed, we cannot directly apply this method to best-fit the FFT power spectrum. Instead, we should consider the mean of the $$\chi_{2}^{2}/2$$ term. In log scale, $$\left\langle \mathrm{log}(\chi^{2}_{2}/2) \right\rangle$$ = -0.25068 ([Vaughan (2005)](https://doi.org/10.1051/0004-6361:20041453)). This term corresponds to the bias that will be introduced to the fitting if one directly implements the least squares method. Hence, we shall include this term in the model function such that the least squares fitting will not be 'biased'. We also note that the value of this bias term is independent of the choice of normalisation of the FFT power spectrum.
+where $P(f_{j})$ is the true power spectrum, and $\chi_{2}^{2}$ is a random variable distributed as $\chi^{2}$ with 2 degrees of freedom. Since the least squares method assumes that the input data set is Gaussian-distributed, we cannot directly apply this method to best-fit the FFT power spectrum. Instead, we should consider the mean of the $$\chi_{2}^{2}/2$$ term. In log scale, $$\left\langle \mathrm{log}(\chi^{2}_{2}/2) \right\rangle$$ = -0.25068 ([Vaughan (2005)](https://doi.org/10.1051/0004-6361:20041453)). This term corresponds to the bias that will be introduced to the fitting if one directly implements the least squares method. Hence, we shall include this term in the model function such that the least squares fitting will not be 'biased'. We also note that the value of this bias term is independent of the choice of normalisation of the FFT power spectrum.
 
 <!--
 Additionally, we can visualise this bias factor. Since the Fourier power follows a chi-square distribution with 2 DoF is essentially an exponential function, we consider the integration of an exponential function over the entire range of power, which gives a constant value:
@@ -155,18 +160,18 @@ where $F(\tau) = e^{-e^{\tau}} e^{\tau}$ is the distribution of the Fourier powe
 
 The power law model we used in the `fit_fourier` function is a superposition of white and coloured noise components, given by:
 
-$$ \mathcal{P}(f) = \mathcal{P}_{c}(f) + \mathcal{P}_{w}(f) = Z_{c} f^{-\alpha_{c}} + Z_{w},$$
+$$P(f) = P_{c}(f) + P_{w}(f) = Z_{c} f^{-\alpha_{c}} + Z_{w},$$
 
 where $Z_{c}$ and $Z_{w}$ are the proportionality constants of coloured and white noises, respectively, and $\alpha$ is the power law index of coloured noise. After obtaining the proportionality constants from the debiased least squares fit, we can estimate the energy of each noise type, $E_{c/w}$ using:
 
 $$E_{c/w} = N \times nf \times Z_{c/w},$$
 
-where $N$ is the number of data points in the time series and $nf$ is the number of Fourier frequencies, which does not include 0 Hz and the Nyquist frequency. And estimate the confidence limit for a given false alarm probability (fap) as $-\ln\left(1-(1-\mathrm{fap})^{1/nf}\right)\times\mathcal{P}(f)$.
+where $N$ is the number of data points in the time series and $nf$ is the number of Fourier frequencies, which does not include 0 Hz and the Nyquist frequency. And estimate the confidence limit for a given false alarm probability (fap) as $-\ln\left(1-(1-\mathrm{fap})^{1/nf}\right)\times{P}(f)$.
 
 See [`fft_fit_example.py`](https://github.com/Warwick-Solar/scope/blob/main/examples/fft_fit_example.py) for an example use of the `fit_fourier` function.
 
 ### 'emd_noise_conf'
-[Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306) showed that the dyadic property of EMD (the center frequencies of consecutive IMFs tend to have a ratio close to 2) results in the following relation between modal energy and modal period:
+[Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306) showed that the dyadic property of EMD (the center frequencies of consecutive IMFs tend to have a ratio close to 2) results in the following relationship between modal energy and modal period of a noise signal:
 
 $$E_{m}P_{m}^{1-\alpha} = \text{const,}$$
 
