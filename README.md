@@ -170,7 +170,7 @@ See [`fft_fit_example.py`](https://github.com/Warwick-Solar/scope/blob/main/exam
 
 $$E_{m}P_{m}^{1-\alpha} = \text{const,}$$
 
-where the parameter $\alpha$ is the power-law index used for charactersing the colour of noise in the Fourier analysis.
+where the parameter $\alpha$ is the power-law index used for characterising the colour of noise in the Fourier analysis.
 
 ![](./docs/source/_static/mc_emd_spectra.png)
 
@@ -181,7 +181,7 @@ It was shown that the energy of each EMD mode, $E_m$ has a chi-squared distribut
 </details>
 
 ## Acknowledgements
-Leave blank
+The creation of this package was supported by the HEIF Space Science Impact Fund grant. The authors are also grateful to [Dr Sergey Anfinogentov](https://github.com/Sergey-Anfinogentov) for co-authoring [Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306) and designing the [prototype](https://github.com/Sergey-Anfinogentov/EMD_conf) of this package in Interactive Data Language (IDL); [Dr Anne-Marie Broomhall](https://github.com/ambroomhall) and [Dr Tishtrya Mehta](https://github.com/TishtryaMehta) for testing and critical suggestions.
 
 ## License
 This project is licensed under the Apache 2.0. License - see the [LICENSE.md](./LICENSE) file for details
