@@ -41,7 +41,7 @@ Python &ge; 3.8
 <details>
  <summary>Click to expand</summary>
 
-The example described below is provided in the `emd_example.py` file (see 'examples').
+The example described below is provided [`emd_example.py`](https://github.com/Warwick-Solar/scope/blob/main/examples/emd_example.py).
 
 The sample signal in this example consists of an oscillatory component, an exponentially decaying trend and a combination of white and coloured noise obeying the power law: \
 ![](./docs/source/_static/input_signal.png)
@@ -163,16 +163,20 @@ $$E_{c/w} = N \times nf \times Z_{c/w},$$
 
 where $N$ is the number of data points in the time series and $nf$ is the number of Fourier frequencies, which does not include 0 Hz and the Nyquist frequency. And estimate the confidence limit for a given false alarm probability (fap) as $-\ln\left(1-(1-\mathrm{fap})^{1/nf}\right)\times\mathcal{P}(f)$.
 
-See 'fft_fit_example.py' file (in 'examples') for an example use of the `fit_fourier` function.
+See [`fft_fit_example.py`](https://github.com/Warwick-Solar/scope/blob/main/examples/fft_fit_example.py) for an example use of the `fit_fourier` function.
 
 ### 'emd_noise_conf'
-[Flandrin et al. (2004)](https://ieeexplore.ieee.org/document/1261951) and [Wu and Huang (2004)](https://royalsocietypublishing.org/doi/10.1098/rspa.2003.1221) investigate the dyadic property of EMD and suggest the following relation between modal energy and modal period:
-```math
-E_{m}P_{m} = \text{const.}
-```
+[Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306) showed that the dyadic property of EMD (the center frequencies of consecutive IMFs tend to have a ratio close to 2) results in the following relation between modal energy and modal period:
+
+$$E_{m}P_{m}^{1-\alpha} = \text{const,}$$
+
+where the parameter $\alpha$ is the power-law index used for charactersing the colour of noise in the Fourier analysis.
+
 ![](./docs/source/_static/mc_emd_spectra.png)
 
-[Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306) suggests that the modal energy of the mth IMF should have a chi-square distribution with the $k$ degrees of freedom (DoF). We thus estimate the confidence limits using the percent-point function of the chi-square distribution. Here we use the false alarm probability = 0.05. The 'emd_noise_conf' function generates 500 (by default) noise samples with the same power law index and energy as the input and conducts the EMD. It extracts the dominant period and modal energy for each IMF by calling the 'emd_period_energy' function. The 'emd_noise_fit' function fits the chi-square distribution to the histogram of modal energy for each mode number to extract the mean energy and $k$. We obtain the mean period, mean energy and number of DoF for each mode number. Due to the dyadic property of EMD, we expect both mean energy vs mean period and $k$ vs mean period are linear in log-log scale. The exact linear relationship is found by fitting a straight line. By obtaining this linear relationship, we use it to generate 500 data points of the confidence limits over the whole range of period.
+See [`energy_period_relation.py`](https://github.com/Warwick-Solar/scope/blob/main/examples/energy_period_relation.py) demonstrating the relationship between $E_{m}$ and $P_{m}$ for various types of noise (values of $\alpha$).
+
+It was shown that the energy of each EMD mode, $E_m$ has a chi-squared distribution with $k$ degrees of freedom (DoF). In contrast to the Fourier power, for which the number of DoF is 2 for all Fourier harmonics, the number of DoF $k$ of EMD modal energy $E_m$ varies with the mode number. We thus estimate the confidence limits using the percent-point function of the chi-square distribution. Here we use the false alarm probability = 0.05. The 'emd_noise_conf' function generates 500 (by default) noise samples with the same power law index and energy as the input and conducts the EMD. It extracts the dominant period and modal energy for each IMF by calling the 'emd_period_energy' function. The 'emd_noise_fit' function fits the chi-square distribution to the histogram of modal energy for each mode number to extract the mean energy and $k$. We obtain the mean period, mean energy and number of DoF for each mode number. Due to the dyadic property of EMD, we expect both mean energy vs mean period and $k$ vs mean period are linear in log-log scale. The exact linear relationship is found by fitting a straight line. By obtaining this linear relationship, we use it to generate 500 data points of the confidence limits over the whole range of period.
 
 </details>
 
