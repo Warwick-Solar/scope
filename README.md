@@ -136,9 +136,9 @@ We can see that for each mode there is a Gaussian-like peak associated with the 
 ### 'fit_fourier'
 In the `fit_fourier` function, we fit the FFT spectrum by a power-law model in log-log scale to extract the power-law index and energy of the noise component of the signal. Firstly, we must note that, at each Fourier frequency, the Fourier power $$I(f_{j})$$ follows a chi-squared distribution with 2 degrees of freedom, denoted as:
 
-$$I(f_{j}) = \mathcal{P}(f_{j}) \chi_{2}^{2}/2$$
+$$I(f_{j}) = P(f_{j}) \chi_{2}^{2}/2$$
 
-where $\mathcal{P}(f_{j})$ is the true power spectrum, and $\chi_{2}^{2}$ is a random variable distributed as $\chi^{2}$ with 2 degrees of freedom. Since the least squares method assumes that the input data set is Gaussian-distributed, we cannot directly apply this method to best-fit the FFT power spectrum. Instead, we should consider the mean of the $$\chi_{2}^{2}/2$$ term. In log scale, $$\left\langle \mathrm{log}(\chi^{2}_{2}/2) \right\rangle$$ = -0.25068 ([Vaughan (2005)](https://doi.org/10.1051/0004-6361:20041453)). This term corresponds to the bias that will be introduced to the fitting if one directly implements the least squares method. Hence, we shall include this term in the model function such that the least squares fitting will not be 'biased'. We also note that the value of this bias term is independent of the choice of normalisation of the FFT power spectrum.
+where $P(f_{j})$ is the true power spectrum, and $\chi_{2}^{2}$ is a random variable distributed as $\chi^{2}$ with 2 degrees of freedom. Since the least squares method assumes that the input data set is Gaussian-distributed, we cannot directly apply this method to best-fit the FFT power spectrum. Instead, we should consider the mean of the $$\chi_{2}^{2}/2$$ term. In log scale, $$\left\langle \mathrm{log}(\chi^{2}_{2}/2) \right\rangle$$ = -0.25068 ([Vaughan (2005)](https://doi.org/10.1051/0004-6361:20041453)). This term corresponds to the bias that will be introduced to the fitting if one directly implements the least squares method. Hence, we shall include this term in the model function such that the least squares fitting will not be 'biased'. We also note that the value of this bias term is independent of the choice of normalisation of the FFT power spectrum.
 
 <!--
 Additionally, we can visualise this bias factor. Since the Fourier power follows a chi-square distribution with 2 DoF is essentially an exponential function, we consider the integration of an exponential function over the entire range of power, which gives a constant value:
@@ -155,7 +155,7 @@ where $F(\tau) = e^{-e^{\tau}} e^{\tau}$ is the distribution of the Fourier powe
 
 The power law model we used in the `fit_fourier` function is a superposition of white and coloured noise components, given by:
 
-$$ \mathcal{P}(f) = \mathcal{P}_{c}(f) + \mathcal{P}_{w}(f) = Z_{c} f^{-\alpha_{c}} + Z_{w},$$
+$$P(f) = P_{c}(f) + P_{w}(f) = Z_{c} f^{-\alpha_{c}} + Z_{w},$$
 
 where $Z_{c}$ and $Z_{w}$ are the proportionality constants of coloured and white noises, respectively, and $\alpha$ is the power law index of coloured noise. After obtaining the proportionality constants from the debiased least squares fit, we can estimate the energy of each noise type, $E_{c/w}$ using:
 
