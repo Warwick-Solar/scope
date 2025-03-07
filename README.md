@@ -160,23 +160,23 @@ where $F(\tau) = e^{-e^{\tau}} e^{\tau}$ is the distribution of the Fourier powe
 
 The power law model we used in the `fit_fourier` function is a superposition of white and coloured noise components, given by:
 
-$$P(f) = P_{c}(f) + P_{w}(f) = Z_{c} f^{-\alpha_{c}} + Z_{w},$$
+$$P(f) = P_{c}(f) + P_{w}(f) = Z_{c} f^{-\alpha} + Z_{w},$$
 
 where $Z_{c}$ and $Z_{w}$ are the proportionality constants of coloured and white noises, respectively, and $\alpha$ is the power law index of coloured noise. 
 
+<!--
 Our definition of the one-sided Fourier power spectrum is given by:
 
 $$I(f_{j}) = \frac{2 \Delta T}{N \sigma^2} |X_{j}|^{2},$$
 
 where $N$ is the length of sampled time series, $\Delta T$ is the time interval, $\sigma$ is the standard deviation, and $X_{j}$ is the discrete Fourier transform.
+--> 
 
 After obtaining the proportionality constants from the debiased least squares fit, we can estimate the energy of each noise type, $E_{c/w}$ using:
 
-$$E_{c/w} = \frac{1}{N} \times nf \times Z_{c/w} \div \mathrm{norm},$$
+$$E_{c/w} \propto nf \times Z_{c/w},$$
 
-where $N$ is the number of data points in the time series, $nf$ is the number of Fourier frequencies, which does not include 0 Hz and the Nyquist frequency, and $\mathrm{norm}$ is the normalisation of the power spectrum, which is $\frac{2 \Delta T}{N \sigma^2}$. And estimate the confidence limit for a given false alarm probability (fap) as:
-
-$$I_{\mathrm{fap}}(f_{j}) = -\ln\left(1-(1-\mathrm{fap})^{1/nf}\right)\times P(f_{j})$$.
+where $nf$ is the number of Fourier frequencies, which does not include 0 Hz and the Nyquist frequency. And estimate the confidence limit for a given false alarm probability (fap) as $-\ln\left(1-(1-\mathrm{fap})^{1/nf}\right)\times P(f_{j})$.
 
 
 See [`fft_fit_example.py`](https://github.com/Warwick-Solar/scope/blob/main/examples/fft_fit_example.py) for an example use of the `fit_fourier` function.
