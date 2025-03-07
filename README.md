@@ -41,7 +41,7 @@ Python &ge; 3.8
 <details>
  <summary>Click to expand</summary>
 
-The example described below is provided [`emd_example.py`](https://github.com/Warwick-Solar/scope/blob/main/examples/emd_example.py).
+The example described below is provided in [`emd_example.py`](https://github.com/Warwick-Solar/scope/blob/main/examples/emd_example.py).
 
 The sample signal in this example consists of an oscillatory component, an exponentially decaying trend and a combination of white and coloured noise obeying the power law: \
 ![](./docs/source/_static/input_signal.png)
