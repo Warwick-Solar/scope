@@ -41,7 +41,7 @@ Python &ge; 3.8
 <details>
  <summary>Click to expand</summary>
 
-The example described below is provided in the `emd_example.py` file.
+The example described below is provided in the `emd_example.py` file (see 'examples').
 
 The sample signal in this example consists of an oscillatory component, an exponentially decaying trend and a combination of white and coloured noise obeying the power law: \
 ![](./docs/source/_static/input_signal.png)
@@ -162,6 +162,8 @@ where $Z_{c}$ and $Z_{w}$ are the proportionality constants of coloured and whit
 $$E_{c/w} = N \times nf \times Z_{c/w},$$
 
 where $N$ is the number of data points in the time series and $nf$ is the number of Fourier frequencies, which does not include 0 Hz and the Nyquist frequency. And estimate the confidence limit for a given false alarm probability (fap) as $-\ln\left(1-(1-\mathrm{fap})^{1/nf}\right)\times\mathcal{P}(f)$.
+
+See 'fft_fit_example.py' file (in 'examples') for an example use of the `fit_fourier` function.
 
 ### 'emd_noise_conf'
 [Flandrin et al. (2004)](https://ieeexplore.ieee.org/document/1261951) and [Wu and Huang (2004)](https://royalsocietypublishing.org/doi/10.1098/rspa.2003.1221) investigate the dyadic property of EMD and suggest the following relation between modal energy and modal period:
