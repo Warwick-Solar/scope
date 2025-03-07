@@ -166,7 +166,7 @@ where $N$ is the number of data points in the time series and $nf$ is the number
 See [`fft_fit_example.py`](https://github.com/Warwick-Solar/scope/blob/main/examples/fft_fit_example.py) for an example use of the `fit_fourier` function.
 
 ### 'emd_noise_conf'
-[Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306) showed that the dyadic property of EMD (the center frequencies of consecutive IMFs tend to have a ratio close to 2) results in the following relation between modal energy and modal period:
+[Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306) showed that the dyadic property of EMD (the center frequencies of consecutive IMFs tend to have a ratio close to 2) results in the following relation between modal energy and modal period of a noise signal:
 
 $$E_{m}P_{m}^{1-\alpha} = \text{const,}$$
 
