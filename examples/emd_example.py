@@ -15,7 +15,7 @@ use_example_data = True # set to False for a new generated time series
 
 if use_example_data:
     #Load example data file
-    t, trend, signal, x = np.loadtxt('examples/example_data.txt')
+    t, trend, signal, x = np.loadtxt('example_data.txt')
 else:
     #Generate time series
     L = 30 #length of time series
