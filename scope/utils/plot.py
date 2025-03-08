@@ -81,7 +81,7 @@ def plot_signal(t, x, title='Input signal', ax=None):
     title : string
         Tittle of the plot
     ax : matplotlib.axes.Axes
-        Axis to alight the plot with other plots
+        Axis to align the plot with other plots
 
     Returns
     -------
