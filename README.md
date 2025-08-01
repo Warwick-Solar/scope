@@ -2,15 +2,21 @@
 <img src="./docs/source/_static/scope_logo.png" alt="Scope Logo" width="300">
 
 <p align="left">
-  <a href="https://pypi.org/project/scope-emd/" style="text-decoration: none; border: none;">
-    <img src="https://img.shields.io/pypi/v/scope-emd" alt="PyPI version" style="vertical-align: middle;">
+  <a href="https://github.com/Warwick-Solar/scope/actions/workflows/tests.yml">
+    <img src="https://github.com/Warwick-Solar/scope/actions/workflows/tests.yml/badge.svg?branch=main" alt="Run Tests">
   </a>
-  <a href="https://statistical-confidence-of-oscillatory-processes-with-emd.readthedocs.io/en/latest/" style="text-decoration: none; border: none;">
-    <img src="https://readthedocs.org/projects/statistical-confidence-of-oscillatory-processes-with-emd/badge/?version=latest" alt="Docs" style="vertical-align: middle;">
+  <a href="https://codecov.io/gh/Warwick-Solar/scope" >
+    <img src="https://codecov.io/github/Warwick-Solar/scope/branch/main/graph/badge.svg" alt="Codecov">
+  </a>
+  <a href="https://statistical-confidence-of-oscillatory-processes-with-emd.readthedocs.io/en/latest/">
+    <img src="https://readthedocs.org/projects/statistical-confidence-of-oscillatory-processes-with-emd/badge/?version=latest" alt="Docs">
+  </a>
+  <a href="https://pypi.org/project/scope-emd/">
+    <img src="https://img.shields.io/pypi/v/scope-emd" alt="PyPI version">
   </a>
 </p>
 
-![example workflow]([https://github.com/github/docs/actions/workflows/main.yml/badge.svg](https://github.com/Warwick-solar/scope/actions/workflows/tests.yml/badge.svg))
+
 
 `scope` - Statistical Confidence of Oscillatory Processes with EMD (Empirical Mode Decomposition).
 
