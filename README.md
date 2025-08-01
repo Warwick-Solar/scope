@@ -9,9 +9,8 @@
     <img src="https://readthedocs.org/projects/statistical-confidence-of-oscillatory-processes-with-emd/badge/?version=latest" alt="Docs" style="vertical-align: middle;">
   </a>
 </p>
-[![CI](https://github.com/Warwick-solar/scope/actions/workflows/tests.yml/badge.svg)](https://github.com/Warwick-solar/scope/actions/workflows/tests.yml)
 
-
+![example workflow]([https://github.com/github/docs/actions/workflows/main.yml/badge.svg](https://github.com/Warwick-solar/scope/actions/workflows/tests.yml/badge.svg))
 
 `scope` - Statistical Confidence of Oscillatory Processes with EMD (Empirical Mode Decomposition).
 
