@@ -35,6 +35,7 @@ setup(
        'emd>=0.7.0',
        'numpy>=1.3.0',
        'lmfit>=1.3.2'
+       'tqdm>=4.0.0'
     ],
     extras_require={
         'dev': ['pytest', 'coverage', 'pytest-cov'],
