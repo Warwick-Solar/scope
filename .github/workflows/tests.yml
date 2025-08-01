@@ -1,16 +1,17 @@
 name: Run Tests
-
-push:
+on:
+  push:
     branches: [main]
     paths-ignore:
       - 'README.md'
       - 'docs/**'
       - '.github/ISSUE_TEMPLATE/**'
-pull_request:
+  pull_request:
     paths-ignore:
       - 'README.md'
       - 'docs/**'
       - '.github/ISSUE_TEMPLATE/**'
+
 
 jobs:
   test:
