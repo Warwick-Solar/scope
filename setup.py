@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="scope-emd",
-    version="0.1.1",
+    version="1.0.0",
     description="scope is the Python-based package for detecting oscillatory \
                  signals in observational or experimental time series with the \
                 EMD technique and assessing their statistical significance vs. \
@@ -36,6 +36,9 @@ setup(
        'numpy>=1.26.4',
        'lmfit>=1.3.2'
     ],
+    extras_require={
+        'dev': ['pytest', 'coverage', 'pytest-cov'],
+    },
     python_requires=">=3.8",
     url="https://github.com/Warwick-Solar/scope",  # Link to GitHub
     classifiers=[
