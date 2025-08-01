@@ -7,7 +7,7 @@ def test_slope_fit_red():
     # fix seed
     np.random.seed(42)
     
-    noise = np.load('test data/red_noise.npy')
+    noise = np.load('tests/test data/red_noise.npy')
     slope = 2
     L = 30 #length of time series
     N = len(noise) #number of data points 
@@ -32,7 +32,7 @@ def test_slope_fit_mixed():
     # fix seed
     np.random.seed(42)
     
-    noise = np.load('test data/mixed_noise.npy')
+    noise = np.load('tests/test data/mixed_noise.npy')
     slope = 2.0
     L = 30 #length of time series
     N = len(noise) #number of data points 
@@ -58,7 +58,7 @@ def test_slope_fit_white():
     # fix seed
     np.random.seed(42)
     
-    noise = np.load('test data/white_noise.npy')
+    noise = np.load('tests/test data/white_noise.npy')
     slope = 0
     L = 30 #length of time series
     N = 600 #number of data points 

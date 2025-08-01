@@ -17,7 +17,7 @@ def test_emd_modes():
     
     smape = 1
     
-    t, trend, signal, x = np.loadtxt('test data/signal.txt')
+    t, trend, signal, x = np.loadtxt('tests/test data/signal.txt')
     
     modes = emd_modes(x, sd_thresh=0.0001)
     signal_emd = modes.sum(axis=1)
@@ -32,7 +32,7 @@ def test_emd_energy_spectrum():
     
     p_max = 6 # real signal period
 
-    t, trend, signal, x = np.loadtxt('test data/signal.txt')
+    t, trend, signal, x = np.loadtxt('tests/test data/signal.txt')
   
     x -= np.mean(x) #set mean to zero
 
@@ -60,7 +60,7 @@ def test_emd_noise_conf():
     
     p_max = 6 # real signal period
     
-    t, trend, signal, x = np.loadtxt('test data/signal.txt')
+    t, trend, signal, x = np.loadtxt('tests/test data/signal.txt')
     
     dt = t[1]-t[0]
     N = len(x) #number of data points 
