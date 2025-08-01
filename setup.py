@@ -34,7 +34,7 @@ setup(
        'colorednoise>=2.2.0',
        'emd>=0.7.0',
        'numpy>=1.3.0',
-       'lmfit>=1.3.2'
+       'lmfit>=1.3.2',
        'tqdm>=4.0.0'
     ],
     extras_require={
