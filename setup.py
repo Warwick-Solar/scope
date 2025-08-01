@@ -33,7 +33,7 @@ setup(
     install_requires=[
        'colorednoise>=2.2.0',
        'emd>=0.7.0',
-       'numpy>=1.26.4',
+       'numpy>=1.3.0',
        'lmfit>=1.3.2'
     ],
     extras_require={
