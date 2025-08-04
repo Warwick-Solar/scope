@@ -204,6 +204,15 @@ It was shown that the energy of each EMD mode, $E_m$ has a chi-squared distribut
 
 </details>
 
+## Contributing
+
+We welcome contributions from the community! 
+
+If you have suggestions, find a bug, or want to improve the package, feel free to open an issue or submit a pull request. Fork the repository, create a new branch, and propose your changes. We’ll review them as soon as possible.
+
+Thank you for helping us improve!
+
+
 ## Acknowledgements
 The creation of this package was supported by the HEIF Space Science Impact Fund grant and the EPSRC EP/Y037456/1 grant. The authors are also grateful to [Dr Sergey Anfinogentov](https://github.com/Sergey-Anfinogentov) for co-authoring [Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306) and designing the [prototype](https://github.com/Sergey-Anfinogentov/EMD_conf) of this package in Interactive Data Language (IDL); [Dr Anne-Marie Broomhall](https://github.com/ambroomhall) and [Dr Tishtrya Mehta](https://github.com/TishtryaMehta) for testing and critical suggestions.
 
