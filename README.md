@@ -214,7 +214,7 @@ Thank you for helping us improve!
 
 
 ## Acknowledgements
-The creation of this package was supported by the HEIF Space Science Impact Fund grant, EPSRC EP/Y037456/1 grant, and LZP lzp2022/1-0017 grant. The authors are also grateful to [Dr Sergey Anfinogentov](https://github.com/Sergey-Anfinogentov) for co-authoring [Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306) and designing the [prototype](https://github.com/Sergey-Anfinogentov/EMD_conf) of this package in Interactive Data Language (IDL); [Dr Anne-Marie Broomhall](https://github.com/ambroomhall) and [Dr Tishtrya Mehta](https://github.com/TishtryaMehta) for testing and critical suggestions.
+The creation of this package was supported by the HEIF Space Science Impact Fund grant, EPSRC EP/Y037456/1 grant, UKRI Stephen Hawking Fellowship EP/Z535473/1, and LZP lzp2022/1-0017 grant. The authors are also grateful to [Dr Sergey Anfinogentov](https://github.com/Sergey-Anfinogentov) for co-authoring [Kolotkov et al. (2016)](https://doi.org/10.1051/0004-6361/201628306) and designing the [prototype](https://github.com/Sergey-Anfinogentov/EMD_conf) of this package in Interactive Data Language (IDL); [Dr Anne-Marie Broomhall](https://github.com/ambroomhall) and [Dr Tishtrya Mehta](https://github.com/TishtryaMehta) for testing and critical suggestions.
 
 ## License
 This project is licensed under the Apache 2.0. License - see the [LICENSE.md](./LICENSE) file for details
