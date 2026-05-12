@@ -236,10 +236,10 @@ def plot_emd_spectrum(emd_sp, cutoff_period, conf_period=None, conf_up=None,
             upper_bounds = f(emd_sp['period'])
             mask = emd_sp['energy'] > upper_bounds
 
-            # mark signigicant EMD modes
+            # mark significant EMD modes
             plt.errorbar(emd_sp['period'][mask], emd_sp['energy'][mask],
                          xerr=emd_sp['period_err'][mask],
-                         label='Signigicant modes', fmt='.', color='green',
+                         label='Significant modes', fmt='.', color='green',
                          ms=15, capsize=5, mew=2)
 
         if conf_down is not None:
