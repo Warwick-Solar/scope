@@ -124,4 +124,17 @@ def test_emd_noise_conf():
     
     assert (p_max >= left) and (p_max <= right) and (upper_bound < emd_sp['energy'][ind])
 
+def test_tune_emd():
+    np.random.seed(42)
+    
+    smape = 1 # Symmetric mean absolute percentage error test threshold
+    
+    t, trend, signal, x = np.loadtxt('tests/test data/signal.txt') # Load test signal data
+    
+    modes = tune_emd(x) # Run the function
+    signal_emd = modes.sum(axis=1) # Reconstruct the signal from the EMD modes
+
+    smape_test = 100 * np.mean(np.abs(signal_emd-x)/(np.abs(signal_emd)+np.abs(x))) # Calculate sMAPE between original and reconstructed signal
+    
+    assert smape_test < smape # If recompiling the modes rebuilds the original signal accurately enough, the test passes
 
