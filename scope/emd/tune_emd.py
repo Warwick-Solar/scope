@@ -4,7 +4,7 @@ from scope.emd import emd_modes, emd_energy_spectrum
 from scipy.signal import savgol_filter
 
 
-def tune_emd(x, n_sh=50, min_sh=5e-8, max_sh=1e-4, trend_scale=0.4, criterion='wape', cont_thresh=0.001, show=False):
+def tune_emd(x, n_sh=50, min_sh=5e-8, max_sh=1e-4, trend_scale=0.4, criterion='wape', cont_thresh=0.001, disc_fix=True, show=False):
     """
     Returns a set of EMD modes for a given time series data.
 
@@ -28,6 +28,8 @@ def tune_emd(x, n_sh=50, min_sh=5e-8, max_sh=1e-4, trend_scale=0.4, criterion='w
         criterion is provided, defaults to 'wape' with a warning.
     cont_thresh : float, optional
         Threshold for residual energy, as a fraction of original signal variance, below which the decomposition process will stop (default is 0.001)
+    disc_fix : bool, optional
+        Whether to apply discontinuity correction for the first mode (default is True)
     show : bool, optional
         Whether to show plots of the residual and determined mode at each iteration, as well as the final EMD spectrum and modes (default is False)
     
@@ -37,7 +39,8 @@ def tune_emd(x, n_sh=50, min_sh=5e-8, max_sh=1e-4, trend_scale=0.4, criterion='w
         2D array where each column corresponds to a determined mode, sorted by period, with the final column representing the residual
     
     """
-    x = x - np.mean(x)
+    x_mean = np.mean(x)
+    x = x - x_mean
     x_original = x.copy()
 
     # Verifying valid input for accuracy criterion
@@ -65,7 +68,24 @@ def tune_emd(x, n_sh=50, min_sh=5e-8, max_sh=1e-4, trend_scale=0.4, criterion='w
     threshold = cont_thresh
     var_orig = np.std(x) ** 2
 
+    # Optional discontinuity correction for first mode
+    if disc_fix:
+        linear_baseline = np.linspace(
+            x_original[0],
+            x_original[-1],
+            len(x_original)
+        )
+
+        x_first_iteration = x_original - linear_baseline
+
+    else:
+        linear_baseline = np.zeros(len(x_original))
+        x_first_iteration = x_original.copy()
+
     for k in range(101):
+        # Signal used for this iteration
+        x_iter = x_first_iteration.copy() if (k == 0 and disc_fix) else x
+
         successful_modes = []  # List of tuples (accuracy criterion, mode, sh_factor) for current iteration
 
         print(f"##### NOW RUNNING ITERATION: {k+1} #####")
@@ -76,7 +96,7 @@ def tune_emd(x, n_sh=50, min_sh=5e-8, max_sh=1e-4, trend_scale=0.4, criterion='w
             try:
                 print(f"Shift factor {i+1}: {sh_factor:.2e}")
 
-                modes_attempt = emd_modes(x, sd_thresh=sh_factor)
+                modes_attempt = emd_modes(x_iter, sd_thresh=sh_factor)
 
                 if modes_attempt is None or (modes_attempt.ndim > 0 and modes_attempt.shape[1] == 0):
                     continue
@@ -89,34 +109,34 @@ def tune_emd(x, n_sh=50, min_sh=5e-8, max_sh=1e-4, trend_scale=0.4, criterion='w
                 # Use chosen accuracy criterion to determine which attempt most closely resembles the current state of the data
                 if criterion == 'wape':
                     for j in range(modes_attempt.shape[1]):
-                        if np.sum(np.abs(x)) == 0:  # Avoid division by zero
+                        if np.sum(np.abs(x_iter)) == 0:  # Avoid division by zero
                             wape_val = np.inf
                         else:
-                            wape_val = np.sum(np.abs(x - modes_attempt[:, j])) / np.sum(np.abs(x))
+                            wape_val = np.sum(np.abs(x_iter - modes_attempt[:, j])) / np.sum(np.abs(x_iter))
                         candidates.append(wape_val)
                 elif criterion == 'nrmse':
                     for j in range(modes_attempt.shape[1]):
-                        if np.sum(np.abs(x)) == 0:
+                        if np.sum(np.abs(x_iter)) == 0:
                             nrmse_val = np.inf
                         else:
-                            nrmse_val = np.linalg.norm(x - modes_attempt[:, j]) / np.linalg.norm(x)
+                            nrmse_val = np.linalg.norm(x_iter - modes_attempt[:, j]) / np.linalg.norm(x_iter)
                         candidates.append(nrmse_val)
                 elif criterion == 'smape':
                     for j in range(modes_attempt.shape[1]):
-                        if np.sum(np.abs(x)) == 0:
+                        if np.sum(np.abs(x_iter)) == 0:
                             smape_val = np.inf
                         else:
                             epsilon = 1e-10
-                            smape_val = np.mean(2.0 * np.abs(x - modes_attempt[:, j]) / (np.abs(x) + np.abs(modes_attempt[:, j]) + epsilon))
+                            smape_val = np.mean(2.0 * np.abs(x_iter - modes_attempt[:, j]) / (np.abs(x_iter) + np.abs(modes_attempt[:, j]) + epsilon))
                         candidates.append(smape_val)
                 elif criterion == 'mase':
                     for j in range(modes_attempt.shape[1]):
-                        if np.sum(np.abs(x)) == 0:
+                        if np.sum(np.abs(x_iter)) == 0:
                             mase_val = np.inf
                         else:
-                            naive_errors = np.abs(x[1:] - x[:-1])
+                            naive_errors = np.abs(x_iter[1:] - x_iter[:-1])
                             scale = np.mean(naive_errors)
-                            mase_val = np.mean(np.abs(x - modes_attempt[:, j])) / scale
+                            mase_val = np.mean(np.abs(x_iter - modes_attempt[:, j])) / scale
                         candidates.append(mase_val)
 
                 if not candidates or np.all(np.isinf(candidates)):
@@ -145,8 +165,9 @@ def tune_emd(x, n_sh=50, min_sh=5e-8, max_sh=1e-4, trend_scale=0.4, criterion='w
         successful_modes.sort(key=lambda item: item[0]) # Sort by accuracy criterion
         best_error, selected_mode, selected_sh_used = successful_modes[0]
 
-        # Apply running average smoothing only for the first iteration (k=0)
+        # Apply smoothing only for first iteration (k=0)
         if k == 0:
+
             window_size = int(trend_scale * len(x_original))
 
             if window_size < 5:
@@ -154,16 +175,38 @@ def tune_emd(x, n_sh=50, min_sh=5e-8, max_sh=1e-4, trend_scale=0.4, criterion='w
             if window_size % 2 == 0:
                 window_size += 1
 
-            selected_mode = savgol_filter(
+            # Reflect padding to reduce edge artefacts
+            pad = window_size // 2
+
+            padded_mode = np.pad(
                 selected_mode,
-                window_length=window_size,
-                polyorder=2,
-                mode='interp'
+                pad_width=pad,
+                mode='reflect'
             )
 
-            print("Applied Savitzky-Golay smoothing to first mode.")
+            kernel = np.ones(window_size) / window_size
 
-        result.append(selected_mode)
+            smoothed = np.convolve(
+                padded_mode,
+                kernel,
+                mode='same'
+            )
+
+            # Remove padding
+            selected_mode = smoothed[pad:-pad]
+
+            # Re-add baseline only if discontinuity fix enabled
+            if disc_fix:
+                selected_mode += linear_baseline
+                print("Applied rolling mean smoothing "
+                      "with discontinuity correction.")
+            else:
+                print("Applied rolling mean smoothing.")
+
+        if k == 0:
+            result.append(selected_mode + x_mean)
+        else:
+            result.append(selected_mode)
 
         if show:
             plt.figure()
@@ -178,7 +221,7 @@ def tune_emd(x, n_sh=50, min_sh=5e-8, max_sh=1e-4, trend_scale=0.4, criterion='w
             plt.ylim(plot_ymin, plot_ymax) # Set consistent y-axis limits
             plt.show()
 
-        x = x - selected_mode
+        x = x_original - selected_mode if k == 0 else x - selected_mode
 
         residual_energy = np.std(x) ** 2 / var_orig if var_orig != 0 else 0
 
