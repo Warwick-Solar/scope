@@ -51,6 +51,7 @@ pip install scope-emd
 ```
 
 ## Example
+### Analysis using `emd_modes` function
 <details>
  <summary>Click to expand</summary>
 
@@ -131,6 +132,13 @@ The EMD modes beyond the confidence limits are considered significant, which are
 
 ![](./docs/source/_static/significant_mode.png) 
 
+</details>
+
+### Analysis using `tune_emd` function
+<details>
+ <summary>Click to expand</summary>
+
+  
 </details>
 
 ## Functions 
