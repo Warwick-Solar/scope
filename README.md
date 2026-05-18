@@ -154,7 +154,7 @@ The empirical trend of the signal is taken as the second to last mode inn the li
 ```python
 trend_emd = modes[:, -2]
 plot_signal(t, trend_emd, 'Trend of the signal')
-``` \
+```
 ![](./docs/source/_static/trend_signal_ns.png)
 
 Hence, the detrended signal is: \
