@@ -51,7 +51,7 @@ pip install scope-emd
 ```
 
 ## Example
-### Analysis using `emd_modes` function
+### Analysis of a stationary signal using the `emd_modes` function
 <details>
  <summary>Click to expand</summary>
 
@@ -134,7 +134,7 @@ The EMD modes beyond the confidence limits are considered significant, which are
 
 </details>
 
-### Analysis using `tune_emd` function
+### Analysis of a non-stationary signal using the `tune_emd` function
 <details>
  <summary>Click to expand</summary>
 
