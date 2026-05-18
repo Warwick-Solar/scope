@@ -111,7 +111,7 @@ if fit_fft['white_energy'] > 0: # check if there is only colored noise model
                             period_max=N*dt, num_samples = 500, 
                             signal_energy=fit_fft['white_energy'], fap=fap)
 ```
-Here, the false alarm probability (fap) is set to 0.05 (95% confidence). The `emd_noise_conf` function generates 500 independent noise samples with the same power law index ('alpha') and energy ('signal_energy') as the input. The other two parameters, 'period_min' and 'period_max', set the range of periods over which the confidence limits are computed. Combining the upper and lower confidence limits for white and coloured noise compenents,
+Here, the false alarm probability (fap) is set to 0.05 (95% confidence). The `emd_noise_conf` function generates 500 independent noise samples with the same power law index ('alpha') and energy ('signal_energy') as the input. The other two parameters, 'period_min' and 'period_max', set the range of periods over which the confidence limits are computed. Combining the upper and lower confidence limits for white and coloured noise components,
 ```python
 #Upper confidence limit for the combined noises
 conf_up = conf_c['up'] + conf_w['up']
@@ -138,7 +138,79 @@ The EMD modes beyond the confidence limits are considered significant, which are
 <details>
  <summary>Click to expand</summary>
 
-  
+The example described below is provided in [`tune_emd_example.py`](https://github.com/Warwick-Solar/scope/blob/main/examples/tune_emd_example.py).
+
+The sample signal in this example consists of a non-stationary oscillatory component, an exponentially decaying trend and a combination of white and coloured noise obeying the power law: \
+![](./docs/source/_static/input_signal_ns.png)
+
+To begin our analysis, we run the `tune_emd` function to obtain the set of intrinsic mode functions (IMFs):
+```python
+modes = tune_emd(x, show=True)
+```
+where we set 'show' to 'True' such that we can see plots of each IMF as they are determined. In this example, we obtained nine EMD modes, eight of which are IMFs and one is the remaining residual signal post-EMD-analysis (i.e. the remaining signal after obtaining and subtracting our final mode from the signal, resulting in the remaining signal's energy falling below the value of the 'cont_thresh' variable. This is defined as 0.001 of the input signal by default, and hence this example run, but this can be changed as the user wishes.). \
+![](./docs/source/_static/EMD_modes_ns.png)
+
+The empirical trend of the signal is taken as the second to last mode inn the list of modes, since the IMFs are sorted by period, from shortest to longest, and then the residual signal is added on at the end of the list.
+```python
+trend_emd = modes[:, -2]
+plot_signal(t, trend_emd, 'Trend of the signal')
+``` \
+![](./docs/source/_static/trend_signal_ns.png)
+
+Hence, the detrended signal is: \
+![](./docs/source/_static/detrended_signal_ns.png)
+
+The rest of the analysis now is follows as in the above example, which also includes further explanations of each step. Now we take a Fast Fourier Transformation of the detrended signal using the `fit_fourier` function:
+```python
+fit_fft = fit_fourier(x, dt, fap=0.05)
+plot_fft_spectrum(fit_fft)
+```
+![](./docs/source/_static/FFT_spectrum_ns.png)
+
+The EMD energy spectrum is computed by the `emd_energy_spectrum` function:
+```python
+emd_sp = emd_energy_spectrum(modes, t)
+cutoff_period = 0.4 * len(x) * dt #show cutoff period
+plot_emd_spectrum(emd_sp, cutoff_period)
+```
+![](./docs/source/_static/emd_spectrum_ns.png) 
+
+The vertical dashed line corresponds to the cutoff period adopted in the `emd_trend` function; all modes beyond this line are considered as components of trend.
+
+With the power-law index and noise energy returned by the `fit_fourier` function, we can compute the confidence limits of the EMD energy spectrum using the `emd_noise_conf` function (separately for coloured noise and, if present, white noise):
+```python
+# false alarm probability
+fap = 0.05
+#Confidence limits for coloured noise
+conf_c = emd_noise_conf(t, alpha=alpha, period_min=2*dt, 
+                        period_max=N*dt, num_samples=500, 
+                        signal_energy=fit_fft['color_energy'], fap=fap)
+#Confidence limits for white noise
+if fit_fft['white_energy'] > 0: # check if there is only colored noise model
+    conf_w = emd_noise_conf(t, alpha=0, period_min=2*dt,
+                            period_max=N*dt, num_samples = 500, 
+                            signal_energy=fit_fft['white_energy'], fap=fap)
+```
+Here, the false alarm probability (fap) is set to 0.05 (95% confidence). Combining the upper and lower confidence limits for white and coloured noise components,
+```python
+#Upper confidence limit for the combined noises
+conf_up = conf_c['up'] + conf_w['up']
+
+#Lower confidence limit for the combined noises
+conf_down = conf_c['down'] + conf_w['down']
+```
+and visualising the EMD energy spectrum with confidence limits,
+```python
+# plot emd spectrum
+plot_emd_spectrum(emd_sp, cutoff_period, conf_period, conf_up, conf_down, conf_mean, fap)
+```
+we obtain\
+![](./docs/source/_static/emd_spectrum_with_conf_ns.png) 
+
+The EMD modes beyond the confidence limits are considered significant, which are not likely to be caused by random noise. In our example, only one mode is found to be significant which seems consistent with the input oscillatory component of the original signal.
+
+![](./docs/source/_static/significant_mode_ns.png)
+
 </details>
 
 ## Functions 
